@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ru" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Hashimov Ilham">
+        <link rel="canonical" href="https://ilhamVode.github.io/ITMO_ICT_WebDevelopment_2026-2027/lab1/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>ЛР1. Сокеты - Веб-программирование · K3339</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Веб-программирование · K3339</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Главная</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">ЛР1. Сокеты</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../lab2/" class="nav-link">ЛР2. Доска домашних заданий</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../lab3/" class="nav-link">ЛР3. API</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../lab4/" class="nav-link">ЛР4. Клиентское приложение</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href=".." class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../lab2/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/ilhamVode/ITMO_ICT_WebDevelopment_2026-2027" class="nav-link"><i class="fa-brands fa-github"></i> GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#no1" class="nav-link">Лабораторная работа №1</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#task-1-udp" class="nav-link">Task 1. UDP клиент и сервер</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#task-2-tcp" class="nav-link">Task 2. TCP сервер с вычислениями</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#task-3-http-" class="nav-link">Task 3. HTTP-сервер</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#task-4-tcp-" class="nav-link">Task 4. Многопользовательский TCP-чат</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_18" class="nav-link"></a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#task-5-get-post" class="nav-link">Task 5. GET и POST запросы</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="no1">Лабораторная работа №1<a class="headerlink" href="#no1" title="Permanent link">&para;</a></h1>
+<h2 id="task-1-udp">Task 1. UDP клиент и сервер<a class="headerlink" href="#task-1-udp" title="Permanent link">&para;</a></h2>
+<p>В первой задаче реализован простой обмен сообщениями по UDP.</p>
+<h3 id="_1">Сервер<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p>Сначала создаётся UDP-адрес и сервер начинает слушать <code>localhost:8080</code>:</p>
+<pre><code class="language-go">addr, err := net.ResolveUDPAddr(&quot;udp&quot;, &quot;localhost:8080&quot;)
+conn, err := net.ListenUDP(&quot;udp&quot;, addr)
+</code></pre>
+<p><code>ResolveUDPAddr</code> меняет строку адреса в <code>UDPAddr</code>, а <code>ListenUDP</code> создаёт UDP-сокет сервера.</p>
+<p>Далее сервер ждёт сообщение от клиента:</p>
+<pre><code class="language-go">buffer := make([]byte, 1024)
+n, clientAddr, err := conn.ReadFromUDP(buffer)
+</code></pre>
+<p><code>ReadFromUDP</code> возвращает количество полученных байтов и адрес клиента, который отправил сообщение.</p>
+<p>После получения сервер выводит сообщение и отправляет ответ обратно этому же клиенту:</p>
+<pre><code class="language-go">fmt.Println(&quot;Получено сообщение от клиента:&quot;, string(buffer[:n]), &quot;от&quot;, clientAddr)
+
+_, err = conn.WriteToUDP([]byte(&quot;Hello, client!&quot;), clientAddr)
+</code></pre>
+<h3 id="_2">Клиент<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p>Клиент также получает адрес сервера:</p>
+<pre><code class="language-go">addr, err := net.ResolveUDPAddr(&quot;udp&quot;, &quot;localhost:8080&quot;)
+conn, err := net.DialUDP(&quot;udp&quot;, nil, addr)
+</code></pre>
+<p><code>DialUDP</code> создаёт UDP-соединение с указанным сервером.</p>
+<p>Сообщение отправляется через <code>Write</code>:</p>
+<pre><code class="language-go">_, err = conn.Write([]byte(&quot;Hello, server!&quot;))
+</code></pre>
+<p>После этого клиент ждёт ответ:</p>
+<pre><code class="language-go">buffer := make([]byte, 1024)
+n, err := conn.Read(buffer)
+</code></pre>
+<p>И выводит только реально полученные байты:</p>
+<pre><code class="language-go">fmt.Println(&quot;Получено сообщение от сервера:&quot;, string(buffer[:n]))
+</code></pre>
+<h3 id="_3">Скриншот<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p><img alt="alt text" src="image.png" /></p>
+<hr />
+<h2 id="task-2-tcp">Task 2. TCP сервер с вычислениями<a class="headerlink" href="#task-2-tcp" title="Permanent link">&para;</a></h2>
+<p>Во второй задаче используется TCP. Клиент выбирает математическую операцию и отправляет параметры серверу.</p>
+<h3 id="_4">Подключение сервера<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>Сервер создаёт TCP-адрес и начинает слушать порт:</p>
+<pre><code class="language-go">addr, err := net.ResolveTCPAddr(&quot;tcp&quot;, &quot;localhost:8080&quot;)
+listener, err := net.ListenTCP(&quot;tcp&quot;, addr)
+</code></pre>
+<p><code>ListenTCP</code> создаёт серверного TCP-слушателя.</p>
+<p>После этого сервер принимает соединение клиента:</p>
+<pre><code class="language-go">clientConn, err := listener.AcceptTCP()
+defer clientConn.Close()
+</code></pre>
+<p><code>AcceptTCP</code> ждёт нового подключения и возвращает отдельное соединение с конкретным клиентом.</p>
+<h3 id="_5">Подключение клиента<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<p>Клиент подключается к серверу через:</p>
+<pre><code class="language-go">addr, err := net.ResolveTCPAddr(&quot;tcp&quot;, &quot;localhost:8080&quot;)
+conn, err := net.DialTCP(&quot;tcp&quot;, nil, addr)
+</code></pre>
+<p><code>DialTCP</code> устанавливает TCP-соединение с сервером.</p>
+<h3 id="_6">Отправка операции<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>Клиент получает номер операции и параметры из консоли. Например для операций с двумя аргументами:</p>
+<pre><code class="language-go">fmt.Scan(&amp;a, &amp;b)
+message = fmt.Sprintf(&quot;%s %v %v&quot;, operation, a, b)
+</code></pre>
+<p>После этого строка отправляется серверу:</p>
+<pre><code class="language-go">_, err = conn.Write([]byte(message))
+</code></pre>
+<p>На сервере сообщение преобразуется в строку и разбивается по пробелам:</p>
+<pre><code class="language-go">message := strings.TrimSpace(string(buf[:n]))
+parts := strings.Fields(message)
+</code></pre>
+<p>Например строка:</p>
+<pre><code class="language-text">1 3 4
+</code></pre>
+<p>после <code>strings.Fields</code> превращается в:</p>
+<pre><code class="language-text">[&quot;1&quot;, &quot;3&quot;, &quot;4&quot;]
+</code></pre>
+<h3 id="_7">Вычисления<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>Для параметров из строк в числа используется:</p>
+<pre><code class="language-go">value, err := strconv.ParseFloat(param, 64)
+</code></pre>
+<p>После этого в зависимости от выбранной операции вызывается нужная функция.</p>
+<p>Например вычисление гипотенузы:</p>
+<pre><code class="language-go">func Pythagoras(a, b float64) float64 {
+    return math.Sqrt((a * a) + (b * b))
+}
+</code></pre>
+<p>Также реализованы:</p>
+<pre><code class="language-go">quadraticEquation(...)
+areaOfTrapezoid(...)
+areaOfParallelogram(...)
+</code></pre>
+<p>Выбор выполняется через <code>switch</code> внутри <code>programCalculation</code>.</p>
+<p>Результат снова переводится в строку и отправляется клиенту:</p>
+<pre><code class="language-go">Result = fmt.Sprintf(&quot;Результат: %v&quot;, outResult)
+clientConn.Write([]byte(Result))
+</code></pre>
+<h3 id="_8">Скриншот<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<p><img alt="alt text" src="image-4.png" /></p>
+<hr />
+<h2 id="task-3-http-">Task 3. HTTP-сервер<a class="headerlink" href="#task-3-http-" title="Permanent link">&para;</a></h2>
+<p>В третьей задаче сервер получает обычный HTTP-запрос от браузера и вручную формирует HTTP-ответ.</p>
+<h3 id="_9">Запуск сервера<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<p>Используется обычный TCP-listener:</p>
+<pre><code class="language-go">addr, err := net.ResolveTCPAddr(&quot;tcp&quot;, &quot;localhost:8080&quot;)
+listener, err := net.ListenTCP(&quot;tcp&quot;, addr)
+</code></pre>
+<p>Сервер постоянно принимает новые подключения:</p>
+<pre><code class="language-go">for {
+    clientConn, err := listener.AcceptTCP()
+    handleClient(clientConn)
+}
+</code></pre>
+<h3 id="http-">Чтение HTTP-запроса<a class="headerlink" href="#http-" title="Permanent link">&para;</a></h3>
+<p>В <code>handleClient</code> запрос браузера читается обычным <code>Read</code>:</p>
+<pre><code class="language-go">buffer := make([]byte, 1024)
+n, err := conn.Read(buffer)
+</code></pre>
+<p>После этого запрос можно вывести:</p>
+<pre><code class="language-go">fmt.Println(&quot;HTTP запрос:&quot;)
+fmt.Println(string(buffer[:n]))
+</code></pre>
+<p>В терминале будет видно примерно:</p>
+<pre><code class="language-text">GET / HTTP/1.1
+Host: localhost:8080
+...
+</code></pre>
+<h3 id="html-">Чтение HTML-файла<a class="headerlink" href="#html-" title="Permanent link">&para;</a></h3>
+<p>HTML в отдельнОм <code>index.html</code>:</p>
+<pre><code class="language-go">html, err := os.ReadFile(&quot;task3/index.html&quot;)
+</code></pre>
+<p><code>os.ReadFile</code> читает содержимое файла и возвращает его как <code>[]byte</code>.</p>
+<h3 id="http-_1">Формирование HTTP-ответа<a class="headerlink" href="#http-_1" title="Permanent link">&para;</a></h3>
+<p>Ответ собирается вручную:</p>
+<pre><code class="language-go">response := &quot;HTTP/1.1 200 OK\r\n&quot; +
+    &quot;Content-Type: text/html\r\n&quot; +
+    &quot;Content-Length: &quot; + fmt.Sprint(len(html)) + &quot;\r\n&quot;
+</code></pre>
+<p>После заголовков обязательно идёт пустая строка:</p>
+<pre><code class="language-go">response += &quot;\r\n&quot; + string(html)
+</code></pre>
+<p><code>\r\n\r\n</code> отделяет HTTP-заголовки от HTML-тела.</p>
+<p>Готовый ответ отправляется браузеру:</p>
+<pre><code class="language-go">_, err = conn.Write([]byte(response))
+</code></pre>
+<h3 id="_10">Скриншот<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<p><img alt="alt text" src="image-5.png" /></p>
+<hr />
+<h2 id="task-4-tcp-">Task 4. Многопользовательский TCP-чат<a class="headerlink" href="#task-4-tcp-" title="Permanent link">&para;</a></h2>
+<p>В этой задаче один сервер обслуживает несколько клиентов одновременно.</p>
+<h3 id="_11">Хранение клиентов<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+<p>Все подключения сохраняются в срез:</p>
+<pre><code class="language-go">var clients []*net.TCPConn
+</code></pre>
+<p>После подключения нового клиента он добавляется в этот срез:</p>
+<pre><code class="language-go">clients = append(clients, clientConn)
+</code></pre>
+<h3 id="_12">Одновременная работа с несколькими клиентами<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
+<p>Для каждого клиента запускается отдельная goroutine:</p>
+<pre><code class="language-go">go handleClient(clientConn)
+</code></pre>
+<p>Goroutine в Go дает выполнять обработку клиентов независимо друг от друга.<br />
+По смыслу здесь она заменяет отдельный поток обработки клиента, который часто используюь в Python.</p>
+<h3 id="mutex">Mutex<a class="headerlink" href="#mutex" title="Permanent link">&para;</a></h3>
+<p>Несколько goroutine могут одновременно изменять <code>clients</code>, поэтому используется:</p>
+<pre><code class="language-go">var mutex sync.Mutex
+</code></pre>
+<p>При изменении среза доступ временно блокируется:</p>
+<pre><code class="language-go">mutex.Lock()
+clients = append(clients, clientConn)
+mutex.Unlock()
+</code></pre>
+<p>Это нужно, чтобы несколько goroutine не меняли общий срез одновременно.</p>
+<h3 id="_13">Получение и рассылка сообщения<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
+<p>Сервер читает сообщение клиента:</p>
+<pre><code class="language-go">n, err := clientConn.Read(buffer)
+</code></pre>
+<p>К сообщению добавляется адрес отправителя:</p>
+<pre><code class="language-go">message := fmt.Sprintf(
+    &quot;CLIENT %s: %s&quot;,
+    clientConn.RemoteAddr(),
+    string(buffer[:n]),
+)
+</code></pre>
+<p>После этого вызывается:</p>
+<pre><code class="language-go">broadcastMessage(message)
+</code></pre>
+<p>Внутри функция проходит по всем клиентам:</p>
+<pre><code class="language-go">for _, client := range clients {
+    client.Write([]byte(message))
+}
+</code></pre>
+<p>Таким образом одно сообщение отправляется всем подключённым клиентам.</p>
+<h3 id="_14">Демонстрация одновременной обработки<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h3>
+<p>В сервер добавлена задержка:</p>
+<pre><code class="language-go">time.Sleep(10 * time.Second)
+</code></pre>
+<p>Она нужна только для демонстрации. Если два клиента отправят сообщения почти одновременно, в терминале будет видно, что обработка обоих сообщений уже началась до завершения первого.</p>
+<h3 id="_15">Удаление клиента<a class="headerlink" href="#_15" title="Permanent link">&para;</a></h3>
+<p>При завершении соединения выполняется:</p>
+<pre><code class="language-go">defer removeClient(clientConn)
+</code></pre>
+<p>Внутри нужный элемент удаляется из среза:</p>
+<pre><code class="language-go">clients = append(clients[:i], clients[i+1:]...)
+</code></pre>
+<h3 id="_16">Клиент чата<a class="headerlink" href="#_16" title="Permanent link">&para;</a></h3>
+<p>Получение сообщений запускается отдельно:</p>
+<pre><code class="language-go">go receiveMessages(conn)
+</code></pre>
+<p>А отправка остаётся в основной goroutine:</p>
+<pre><code class="language-go">sendMessages(conn)
+</code></pre>
+<p>Так клиент может одновременно ждать сообщения от сервера и вводить свои.</p>
+<p>Для ввода полной строки используется:</p>
+<pre><code class="language-go">scanner := bufio.NewScanner(os.Stdin)
+scanner.Scan()
+message := scanner.Text()
+</code></pre>
+<p>Перед отправкой добавляется <code>\n</code>:</p>
+<pre><code class="language-go">conn.Write([]byte(message + &quot;\n&quot;))
+</code></pre>
+<p>А получатель читает данные до <code>\n</code>:</p>
+<pre><code class="language-go">reader := bufio.NewReader(conn)
+message, err := reader.ReadString('\n')
+</code></pre>
+<p>Это нужно, потому что TCP передаёт поток байтов и сам не хранит границы отдельных сообщений.</p>
+<h3 id="_17">Скриншот<a class="headerlink" href="#_17" title="Permanent link">&para;</a></h3>
+<h2 id="_18"><img alt="alt text" src="image-6.png" /><a class="headerlink" href="#_18" title="Permanent link">&para;</a></h2>
+<h2 id="task-5-get-post">Task 5. GET и POST запросы<a class="headerlink" href="#task-5-get-post" title="Permanent link">&para;</a></h2>
+<p>В пятой задаче реализован простой веб-сервер. Он принимает дисциплину и оценку через POST, а через GET показывает сохранённые оценки.</p>
+<p>Здесь используется более короткий вариант:</p>
+<pre><code class="language-go">listener, err := net.Listen(&quot;tcp&quot;, &quot;localhost:8080&quot;)
+</code></pre>
+<p>Подключение принимается так:</p>
+<pre><code class="language-go">conn, err := listener.Accept()
+handleClient(conn)
+</code></pre>
+<h3 id="get-post">Определение GET или POST<a class="headerlink" href="#get-post" title="Permanent link">&para;</a></h3>
+<p>Запрос читается:</p>
+<pre><code class="language-go">n, err := conn.Read(buf)
+request := string(buf[:n])
+</code></pre>
+<p>Далее начало запроса разбивается:</p>
+<pre><code class="language-go">parts := strings.Fields(request)
+method := strings.ToUpper(parts[0])
+path := parts[1]
+</code></pre>
+<p>Для запроса:</p>
+<pre><code class="language-text">GET / HTTP/1.1
+</code></pre>
+<p>получается:</p>
+<pre><code class="language-text">method = GET
+path = /
+</code></pre>
+<p>После этого вызывается нужный обработчик:</p>
+<pre><code class="language-go">if method == &quot;GET&quot; {
+    handleGet(conn, path)
+} else if method == &quot;POST&quot; {
+    handlePost(conn, path, request)
+}
+</code></pre>
+<h3 id="_19">Хранение оценок<a class="headerlink" href="#_19" title="Permanent link">&para;</a></h3>
+<p>Одна запись представлена структурой:</p>
+<pre><code class="language-go">type Grade struct {
+    Subject string
+    Grade   string
+}
+</code></pre>
+<p>Все записи хранятся в срезе:</p>
+<pre><code class="language-go">var grades []Grade
+</code></pre>
+<h3 id="post">POST<a class="headerlink" href="#post" title="Permanent link">&para;</a></h3>
+<p>Тело HTTP-запроса находится после пустой строки. Поэтому запрос делится по:</p>
+<pre><code class="language-go">parts := strings.Split(request, &quot;\r\n\r\n&quot;)
+body := parts[1]
+</code></pre>
+<p>Форма отправляет данные примерно так:</p>
+<pre><code class="language-text">subject=Math&amp;grade=5
+</code></pre>
+<p>Сначала разделяем разные поля:</p>
+<pre><code class="language-go">fields := strings.Split(body, &quot;&amp;&quot;)
+</code></pre>
+<p>Получается:</p>
+<pre><code class="language-text">subject=Math
+grade=5
+</code></pre>
+<p>Затем каждое поле разделяется по <code>=</code>:</p>
+<pre><code class="language-go">pair := strings.Split(field, &quot;=&quot;)
+</code></pre>
+<p>После этого через <code>switch</code> значения записываются в переменные:</p>
+<pre><code class="language-go">switch pair[0] {
+case &quot;subject&quot;:
+    subject = pair[1]
+case &quot;grade&quot;:
+    grade = pair[1]
+}
+</code></pre>
+<p>Новая запись добавляется:</p>
+<pre><code class="language-go">grades = append(grades, Grade{
+    Subject: subject,
+    Grade:   grade,
+})
+</code></pre>
+<p>После сохранения снова вызывается <code>handleGet</code>, чтобы сразу показать обновлённую страницу:</p>
+<pre><code class="language-go">handleGet(conn, &quot;/&quot;)
+</code></pre>
+<h3 id="get">GET<a class="headerlink" href="#get" title="Permanent link">&para;</a></h3>
+<p>HTML хранится отдельно в <code>index.html</code>:</p>
+<pre><code class="language-go">html, err := os.ReadFile(&quot;index.html&quot;)
+</code></pre>
+<p>В файле есть место:</p>
+<pre><code class="language-html">{{GRADES}}
+</code></pre>
+<p>Из сохранённых оценок создаются элементы списка:</p>
+<pre><code class="language-go">for _, grade := range grades {
+    gradesHTML += &quot;&lt;li&gt;&quot; + grade.Subject + &quot; - &quot; + grade.Grade + &quot;&lt;/li&gt;&quot;
+}
+</code></pre>
+<p>После этого <code>{{GRADES}}</code> заменяется готовым HTML:</p>
+<pre><code class="language-go">htmlString := strings.Replace(
+    string(html),
+    &quot;{{GRADES}}&quot;,
+    gradesHTML,
+    1,
+)
+</code></pre>
+<p>Дальше формируется обычный HTTP-ответ:</p>
+<pre><code class="language-go">response := &quot;HTTP/1.1 200 OK\r\n&quot; +
+    &quot;Content-Type: text/html; charset=utf-8\r\n&quot; +
+    &quot;Content-Length: &quot; + strconv.Itoa(len(htmlString)) + &quot;\r\n&quot;
+</code></pre>
+<p>И добавляется тело:</p>
+<pre><code class="language-go">response += &quot;\r\n&quot; + htmlString
+</code></pre>
+<p>После этого страница отправляется браузеру:</p>
+<pre><code class="language-go">conn.Write([]byte(response))
+</code></pre>
+<h3 id="_20">Скриншоты<a class="headerlink" href="#_20" title="Permanent link">&para;</a></h3>
+<p><img alt="alt text" src="image-7.png" /></p>
+<p>-</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

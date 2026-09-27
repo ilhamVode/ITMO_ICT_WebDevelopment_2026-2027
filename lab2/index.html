@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ru" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Hashimov Ilham">
+        <link rel="canonical" href="https://ilhamVode.github.io/ITMO_ICT_WebDevelopment_2026-2027/lab2/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>ЛР2. Доска домашних заданий - Веб-программирование · K3339</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Веб-программирование · K3339</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Главная</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../lab1/" class="nav-link">ЛР1. Сокеты</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">ЛР2. Доска домашних заданий</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../lab3/" class="nav-link">ЛР3. API</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../lab4/" class="nav-link">ЛР4. Клиентское приложение</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../lab1/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../lab3/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/ilhamVode/ITMO_ICT_WebDevelopment_2026-2027" class="nav-link"><i class="fa-brands fa-github"></i> GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#no2" class="nav-link">Лабораторная работа №2</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#_1" class="nav-link">Доска домашних заданий</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#21" class="nav-link">Практика 2.1. Проект, модели и первые страницы</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#22-crud" class="nav-link">Практика 2.2. Связи, списки и CRUD</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#23" class="nav-link">Практика 2.3. Расширение пользователя</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_10" class="nav-link">Авторизация и разделение прав</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_14" class="nav-link">Пагинация, поиск и фильтрация</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_18" class="nav-link">Оформление и реализованные интерфейсы</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="no2">Лабораторная работа №2<a class="headerlink" href="#no2" title="Permanent link">&para;</a></h1>
+<h2 id="_1">Доска домашних заданий<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>Во второй работе реализован сайт для хранения домашних заданий, пользователей и сдач. Работа на Go.</p>
+<hr />
+<h2 id="21">Практика 2.1. Проект, модели и первые страницы<a class="headerlink" href="#21" title="Permanent link">&para;</a></h2>
+<h3 id="task-1">Task 1. Создание и запуск проекта<a class="headerlink" href="#task-1" title="Permanent link">&para;</a></h3>
+<p>Проект находится в <code>laboratory_work_2</code>. Его основные файлы:</p>
+<pre><code class="language-text">laboratory_work_2/
+├── cmd/server/main.go
+├── internal/
+│   ├── app/
+│   │   ├── models.go
+│   │   ├── repository.go
+│   │   ├── repository_postgres.go
+│   │   ├── views.go
+│   │   ├── urls.go
+│   │   ├── admin.go
+│   │   └── auth.go
+│   └── database/postgres.go
+├── migrations/
+│   ├── 001_init.up.sql
+│   ├── 001_init.down.sql
+│   ├── 002_extend_users.up.sql
+│   └── 002_extend_users.down.sql
+├── web/templates/
+├── go.mod
+└── go.sum
+</code></pre>
+<p>Перед запуском нужна PostgreSQL с миграциями и локальный файл <code>.env</code>. Пример его формата значениями:</p>
+<pre><code class="language-dotenv">DATABASE_DSN=&quot;host=localhost user=lab_user password=d_password dbname=lab2 port=5432 sslmode=disable&quot;
+</code></pre>
+<p>В <code>main.go</code> конфигурация читается так:</p>
+<pre><code class="language-go">err := godotenv.Load()
+dsn := os.Getenv(&quot;DATABASE_DSN&quot;)
+db, err := database.NewPostgres(dsn)
+</code></pre>
+<p>В текущем коде ошибка загрузки <code>.env</code> останавливает запуск. Значит, файл должен существовать даже при использовании переменных окружения.</p>
+<p>Подключение создаётся в <code>internal/database/postgres.go</code>:</p>
+<pre><code class="language-go">dialector := postgres.Open(dsn)
+db, err := gorm.Open(dialector, &amp;gorm.Config{})
+sqlDB, err := db.DB()
+err = sqlDB.Ping()
+</code></pre>
+<p><code>gorm.Open</code> создаёт объект ORM. Через <code>db.DB()</code> получается нижележащий <code>*sql.DB</code>, чтобы проверить доступность PostgreSQL методом <code>Ping</code>.</p>
+<p>После этого создаются репозитории, обработчики и маршрутизатор. Сервер слушает <code>127.0.0.1:8080</code>; список заданий открывается по адресу <code>http://127.0.0.1:8080/homeworks</code>. Для <code>/</code> отдельного маршрута нет.</p>
+<p><img alt="alt text" src="Images/image.png" /></p>
+<p>Общий путь запроса:</p>
+<pre><code class="language-text">Браузер → ServeMux → обработчик → репозиторий → PostgreSQL
+                          ↓
+                    html/template → HTML в браузер
+</code></pre>
+<h3 id="task-21">Task 2.1. Модель данных<a class="headerlink" href="#task-21" title="Permanent link">&para;</a></h3>
+<p>В <code>internal/app/models.go</code> описаны три структуры: <code>User</code>, <code>Homework</code> и <code>Submission</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Модель</th>
+<th>Основные поля</th>
+<th>Для чего используется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>User</code></td>
+<td><code>ID</code>, <code>Username</code>, <code>PasswordHash</code>, <code>IsAdmin</code>, <code>ClassName</code></td>
+<td>Пользователь и его роль</td>
+</tr>
+<tr>
+<td><code>Homework</code></td>
+<td><code>TeacherID</code>, <code>Subject</code>, <code>Text</code>, <code>Penalty</code>, даты</td>
+<td>Домашнее задание</td>
+</tr>
+<tr>
+<td><code>Submission</code></td>
+<td><code>StudentID</code>, <code>HomeworkID</code>, <code>Text</code>, <code>SubmittedAt</code>, <code>Grade</code></td>
+<td>Сдача конкретного задания</td>
+</tr>
+</tbody>
+</table>
+<p>Например, домашнее задание описано так:</p>
+<pre><code class="language-go">type Homework struct {
+    ID        int64
+    TeacherID int64
+    Subject   string
+    Text      string
+    Penalty   string
+    IssueDate time.Time
+    StartDate time.Time
+    EndDate   time.Time
+}
+</code></pre>
+<p><code>struct</code> в данном случае играет роль модели с полями.</p>
+<p>По соглашениям GORM структура <code>Homework</code> соответствует таблице <code>homeworks</code>, а поле <code>TeacherID</code> колонке <code>teacher_id</code>. Структуры описывают данные в программе.</p>
+<p>Связи имеют вид:</p>
+<pre><code class="language-text">users.id ──&lt; homeworks.teacher_id
+users.id ──&lt; submissions.student_id
+homeworks.id ──&lt; submissions.homework_id
+</code></pre>
+<p>Один пользователь может быть указан преподавателем у нескольких заданий. У задания может быть несколько сдач, а пользователь может сдавать разные задания.</p>
+<p>В <code>Submission</code> оценка объявлена как указатель:</p>
+<pre><code class="language-go">Grade *float64
+</code></pre>
+<p><code>nil</code> означает, что оценки пока нет. Это отличается от оценки <code>0</code>; в PostgreSQL отсутствие оценки хранится как <code>NULL</code>.</p>
+<h3 id="task-22">Task 2.2. Миграции<a class="headerlink" href="#task-22" title="Permanent link">&para;</a></h3>
+<p>Первая миграция <code>001_init.up.sql</code> создаёт таблицы <code>users</code>, <code>homeworks</code> и <code>submissions</code>. Например:</p>
+<pre><code class="language-sql">CREATE TABLE submissions (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL,
+    homework_id BIGINT NOT NULL,
+    text TEXT NOT NULL,
+    submitted_at TIMESTAMP NOT NULL,
+    grade DOUBLE PRECISION,
+
+    FOREIGN KEY (student_id) REFERENCES users(id),
+    FOREIGN KEY (homework_id) REFERENCES homeworks(id)
+);
+</code></pre>
+<p>В отличие от <code>makemigrations</code>, SQL здесь написан вручную. В приложении нет <code>AutoMigrate</code> и автоматического запуска этих файлов. Для новой базы последовательно применяются <code>001_init.up.sql</code>, затем <code>002_extend_users.up.sql</code> через используемый SQL-клиент или инструмент миграций.</p>
+<p><img alt="alt text" src="Images/image-1.png" /></p>
+<h3 id="_2">Репозиторий и запросы к БД<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p>Обработчики обращаются к интерфейсу репозитория. Например:</p>
+<pre><code class="language-go">type UserRepository interface {
+    Create(ctx context.Context, user User) (int64, error)
+    GetByID(ctx context.Context, id int64) (User, error)
+    GetByUsername(ctx context.Context, username string) (User, error)
+    GetAll(ctx context.Context) ([]User, error)
+}
+</code></pre>
+<p>Интерфейс перечисляет доступные операции. Реализация с PostgreSQL хранит <code>*gorm.DB</code> и выполняет запросы:</p>
+<pre><code class="language-go">result := r.db.WithContext(ctx).Create(&amp;user)
+result := r.db.WithContext(ctx).First(&amp;user, id)
+result := r.db.WithContext(ctx).Find(&amp;users)
+</code></pre>
+<p>Знак <code>&amp;</code> передаёт адрес переменной, чтобы GORM мог заполнить её данными. Вместо исключения запрос возвращает ошибку в <code>result.Error</code>. <code>r.Context()</code> передаёт контекст текущего HTTP-запроса в запрос к БД.</p>
+<h3 id="task-3">Task 3. Панель администратора<a class="headerlink" href="#task-3" title="Permanent link">&para;</a></h3>
+<p>Панель находится по адресу <code>/admin</code>. В ней есть списки и формы создания пользователей, домашних заданий и сдач.</p>
+<p>В Django эти страницы предоставляет встроенная админка. Здесь они написаны в <code>admin.go</code>, поэтому каждая операция подключается отдельным маршрутом и шаблоном.</p>
+<p>Например, список пользователей получает данные и передаёт их в шаблон:</p>
+<pre><code class="language-go">users, err := v.userRepo.GetAll(r.Context())
+tmpl, err := template.ParseFiles(&quot;web/templates/admin/users.html&quot;)
+err = tmpl.Execute(w, users)
+</code></pre>
+<p>Первый администратор должен уже находиться в БД. Отдельной команды <code>createsuperuser</code> нет.</p>
+<p><img alt="alt text" src="Images/image-2.png" /></p>
+<h3 id="task-4-id">Task 4. Страница объекта по ID<a class="headerlink" href="#task-4-id" title="Permanent link">&para;</a></h3>
+<p>В <code>HomeworkView.Detail</code> идентификатор берётся из адреса:</p>
+<pre><code class="language-go">idStr := r.PathValue(&quot;id&quot;)
+id, err := strconv.ParseInt(idStr, 10, 64)
+homework, err := v.repo.GetByID(r.Context(), id)
+</code></pre>
+<p>Для <code>/homework/1</code> строка <code>idStr</code> равна <code>"1"</code>. <code>ParseInt</code> переводит её в <code>int64</code>. Если ID некорректный, возвращается HTTP 400; если запись не найдена 404.</p>
+<p>В шаблон передаётся структура с заданием и текущим пользователем:</p>
+<pre><code class="language-go">data := HomeworkPageData{
+    Homework: homework,
+    User:     user,
+    IsLogged: isLogged,
+}
+err = tmpl.Execute(w, data)
+</code></pre>
+<p>В HTML к этим данным обращаются так:</p>
+<pre><code class="language-html">&lt;h1&gt;{{ .Homework.Subject }}&lt;/h1&gt;
+&lt;p&gt;&lt;b&gt;Описание:&lt;/b&gt; {{ .Homework.Text }}&lt;/p&gt;
+</code></pre>
+<p>Точка это переданные в <code>Execute</code> данные. <code>html/template</code> подставляет значения и экранирует обычный текст с учётом HTML-контекста. Это Go-шаблонизатор.</p>
+<p><img alt="alt text" src="Images/image-3.png" /></p>
+<h3 id="task-5">Task 5. Маршруты<a class="headerlink" href="#task-5" title="Permanent link">&para;</a></h3>
+<p>В <code>urls.go</code> адрес связывается с обработчиком:</p>
+<pre><code class="language-go">mux := http.NewServeMux()
+mux.HandleFunc(&quot;GET /homework/{id}&quot;, homeworkView.Detail)
+mux.HandleFunc(&quot;GET /homeworks&quot;, homeworkView.List)
+</code></pre>
+<p>В шаблоне маршрута указаны HTTP-метод и параметр <code>{id}</code>, который затем читается через <code>r.PathValue</code>.</p>
+<p>Маршрутизатор передаётся в <code>http.Serve(listener, router)</code> в <code>main.go</code>. общий маршрутизатор создаётся функцией <code>NewRouter</code>.</p>
+<hr />
+<h2 id="22-crud">Практика 2.2. Связи, списки и CRUD<a class="headerlink" href="#22-crud" title="Permanent link">&para;</a></h2>
+<h3 id="task-1_1">Task 1. Промежуточная модель<a class="headerlink" href="#task-1_1" title="Permanent link">&para;</a></h3>
+<p><code>Submission</code> связывает пользователя и домашнее задание. У этой связи есть собственные данные: текст ответа, время сдачи и оценка.</p>
+<pre><code class="language-go">type Submission struct {
+    ID          int64
+    StudentID   int64
+    HomeworkID  int64
+    Text        string
+    SubmittedAt time.Time
+    Grade       *float64
+}
+</code></pre>
+<p>По назначению это соответствует промежуточной модели <code>through</code> из Django: связь хранится в отдельной таблице вместе со своими полями. В Go-проекте внешние ключи заданы в SQL, а не через <code>ManyToManyField</code> или ассоциации GORM.</p>
+<p><img alt="alt text" src="Images/image-4.png" /></p>
+<h3 id="task-2">Task 2. Список пользователей и заданий<a class="headerlink" href="#task-2" title="Permanent link">&para;</a></h3>
+<p>Вывод списка пользователей устроен так же, как список в админке: <code>GetAll → ParseFiles → Execute</code>. Отличаются шаблон <code>web/templates/users.html</code> и адрес <code>/users</code>.</p>
+<p>В шаблоне список перебирается через <code>range</code>:</p>
+<pre><code class="language-html">{{ range . }}
+    &lt;p&gt;
+        ID: {{ .ID }}&lt;br&gt;
+        Username: {{ .Username }}&lt;br&gt;
+        Класс: {{ .ClassName }}
+    &lt;/p&gt;
+{{ end }}
+</code></pre>
+<p>Внутри <code>range</code> точка означает текущего пользователя, а не весь список.</p>
+<p>У заданий есть список <code>/homeworks</code> и отдельная страница <code>/homework/{id}</code>. В списке используются пагинация и фильтрация они разобраны ниже, поэтому второй раз весь обработчик не приводится.</p>
+<h3 id="-cbv">Обработчик-метод и CBV<a class="headerlink" href="#-cbv" title="Permanent link">&para;</a></h3>
+<p>В методичке отдельно рассматриваются FBV и CBV. В Go HTTP-обработчик принимает <code>http.ResponseWriter</code> и <code>*http.Request</code>. <code>ResponseWriter</code> нужен для ответа клиенту, <code>Request</code> содержит запрос.</p>
+<p>Обработчики проекта оформлены методами структур:</p>
+<pre><code class="language-go">type HomeworkView struct {
+    repo HomeworkRepository
+    auth *Auth
+}
+
+func (v *HomeworkView) Detail(w http.ResponseWriter, r *http.Request) {
+    // Получение задания и вывод шаблона.
+}
+</code></pre>
+<p><code>(v *HomeworkView)</code> он получатель метода. Через него обработчик получает доступ к репозиторию и авторизации. Это позволяет собрать связанные действия в одном типе. чтение запроса, проверки и сохранение написаны явно.</p>
+<p>Методы <code>UserView.List</code> и <code>UserView.Create</code> тоже имеют получателя. Поэтому отдельной реализации списка и создания пользователя как свободных функций, буквально соответствующей требованию FBV, в текущем коде нет.</p>
+<h3 id="task-3_1">Task 3. Создание пользователя<a class="headerlink" href="#task-3_1" title="Permanent link">&para;</a></h3>
+<p>Один адрес обслуживает два действия:</p>
+<pre><code class="language-go">mux.HandleFunc(&quot;GET /users/create&quot;, userView.Create)
+mux.HandleFunc(&quot;POST /users/create&quot;, userView.Create)
+</code></pre>
+<p>При <code>GET</code> показывается форма, при <code>POST</code> читаются значения и создаётся запись:</p>
+<pre><code class="language-go">err := r.ParseForm()
+username := r.FormValue(&quot;username&quot;)
+password := r.FormValue(&quot;password&quot;)
+className := r.FormValue(&quot;class_name&quot;)
+</code></pre>
+<p>Значение <code>name</code> у HTML-поля должно совпадать с аргументом <code>FormValue</code>.</p>
+<p>Обычная форма задаёт <code>IsAdmin: false</code>. В админ форме дополнительно читается флажок:</p>
+<pre><code class="language-go">isAdmin := r.FormValue(&quot;is_admin&quot;) == &quot;on&quot;
+</code></pre>
+<p>Доступ к админ форме проверяется на сервере. Остальные поля сохраняются тем же методом <code>UserRepository.Create</code>; повторять его реализацию для админки не нужно.</p>
+<h3 id="_3">Создание домашнего задания<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>Администратор открывает <code>/homeworks/create</code>. Форма передаёт предмет, ID преподавателя, даты, описание и штраф.</p>
+<p>Число и даты преобразуются из строк:</p>
+<pre><code class="language-go">teacherID, err := strconv.ParseInt(teacherIDStr, 10, 64)
+startDate, err := time.Parse(&quot;2006-01-02T15:04&quot;, startDateStr)
+endDate, err := time.Parse(&quot;2006-01-02T15:04&quot;, endDateStr)
+</code></pre>
+<p>В Go формат даты записывается через специальную дату <code>2006-01-02T15:04</code></p>
+<p>Дата публикации задаётся через <code>time.Now()</code>. Запись сохраняется методом <code>Create</code>, после чего сервер перенаправляет браузер на список:</p>
+<pre><code class="language-go">http.Redirect(w, r, &quot;/homeworks&quot;, http.StatusSeeOther)
+</code></pre>
+<p><code>StatusSeeOther</code> ответ 303. Браузер после POST выполняет GET списка, поэтому обновление открывшейся страницы не повторяет отправку формы.
+Ниже видно так же что работет пагинация.</p>
+<p><img alt="alt text" src="Images/image-5.png" />
+<img alt="alt text" src="Images/image-6.png" />
+<img alt="alt text" src="Images/image-7.png" /></p>
+<h3 id="_4">Обновление домашнего задания<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p><code>/homework/{id}/update</code> сначала получает существующее задание. При GET его значения подставляются в форму:</p>
+<pre><code class="language-html">&lt;input type=&quot;text&quot; name=&quot;subject&quot; value=&quot;{{ .Subject }}&quot;&gt;
+&lt;input type=&quot;datetime-local&quot; name=&quot;start_date&quot; value=&quot;{{ .StartDate.Format &quot;2006-01-02T15:04&quot; }}&quot;&gt;
+</code></pre>
+<p>При POST поля читаются так же, как при создании. Отличается сохранение: изменяется уже найденная структура с её ID, затем вызывается <code>v.repo.Update</code>. В репозитории используется:</p>
+<pre><code class="language-go">result := r.db.WithContext(ctx).Save(&amp;homework)
+</code></pre>
+<p>После сохранения браузер возвращается на карточку задания. Код чтения полей здесь такой же, поэтому повторно его не привожу.</p>
+<p><img alt="alt text" src="Images/image-8.png" />
+<img alt="alt text" src="Images/image-9.png" />
+<img alt="alt text" src="Images/image-10.png" /></p>
+<h3 id="_5">Удаление домашнего задания<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<p>При GET <code>/homework/{id}/delete</code> показывается подтверждение. Само удаление выполняется только после отправки формы POST:</p>
+<pre><code class="language-go">err = v.repo.Delete(r.Context(), id)
+http.Redirect(w, r, &quot;/homeworks&quot;, http.StatusSeeOther)
+</code></pre>
+<p>В репозитории вызывается <code>Delete(&amp;Homework{}, id)</code>. После этого показывается список.</p>
+<p>пробуем удалить задание, которое кто-то сдал
+<img alt="alt text" src="Images/image-11.png" />
+<img alt="alt text" src="Images/image-12.png" /></p>
+<p>теперь пробуем удалить задание, которое никто не сдал
+<img alt="alt text" src="Images/image-13.png" />
+<img alt="alt text" src="Images/image-14.png" /></p>
+<p>Создание сдачи имеет вид</p>
+<pre><code class="language-go">submission := Submission{
+    StudentID:   studentID,
+    HomeworkID:  homeworkID,
+    Text:        text,
+    SubmittedAt: time.Now(),
+    Grade:       nil,
+}
+</code></pre>
+<p>Время сдачи задаётся сервером, оценка при создании отсутствует. Сейчас форма доступна администратору по <code>/admin/submissions/create</code>.</p>
+<p><img alt="alt text" src="Images/image-15.png" />
+<img alt="alt text" src="Images/image-16.png" /></p>
+<hr />
+<h2 id="23">Практика 2.3. Расширение пользователя<a class="headerlink" href="#23" title="Permanent link">&para;</a></h2>
+<p>В этой практике нужно добавить номер паспорта, домашний адрес и национальность, вывести их в админке и реализовать форму создания пользователя с новыми атрибутами.</p>
+<h3 id="_6">Новые поля модели<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>В структуру <code>User</code> добавлены:</p>
+<pre><code class="language-go">PassportNumber string
+HomeAddress    string
+Nationality    string
+</code></pre>
+<p>В Django для этого в методичке предлагается наследование от <code>AbstractUser</code>. Здесь модель пользователя изначально своя, поэтому поля добавляются в структуру.</p>
+<h3 id="_7">Изменение таблицы<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>Миграция <code>002_extend_users.up.sql</code> дополняет существующую таблицу:</p>
+<pre><code class="language-sql">ALTER TABLE users
+ADD COLUMN passport_number TEXT,
+ADD COLUMN home_address TEXT,
+ADD COLUMN nationality TEXT;
+</code></pre>
+<h3 id="_8">Чтение новых полей из формы<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<p>В <code>UserView.Create</code> и <code>AdminView.CreateUser</code> добавлены одинаковые строки:</p>
+<pre><code class="language-go">passportNumber := r.FormValue(&quot;passport_number&quot;)
+homeAddress := r.FormValue(&quot;home_address&quot;)
+nationality := r.FormValue(&quot;nationality&quot;)
+</code></pre>
+<p>Затем значения попадают в создаваемого пользователя:</p>
+<pre><code class="language-go">PassportNumber: passportNumber,
+HomeAddress:    homeAddress,
+Nationality:    nationality,
+</code></pre>
+<h3 id="_9">Вывод пользователя<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<p>В обычном списке <code>/users</code> и в <code>/admin/users</code> добавлены выражения:</p>
+<pre><code class="language-html">Номер паспорта: {{ .PassportNumber }}&lt;br&gt;
+Домашний адрес: {{ .HomeAddress }}&lt;br&gt;
+Национальность: {{ .Nationality }}
+</code></pre>
+<p>Обычная форма находится по <code>/users/create</code>, административная  по <code>/admin/users/create</code>. Обе передают три дополнительных поля. В административной форме также можно задать <code>is_admin</code>.</p>
+<p><img alt="alt text" src="Images/image-17.png" />
+<img alt="alt text" src="Images/image-18.png" />
+<img alt="alt text" src="Images/image-19.png" />
+<img alt="alt text" src="Images/image-20.png" /></p>
+<hr />
+<h2 id="_10">Авторизация и разделение прав<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<h3 id="_11">Вход и сессия<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+<p>GET <code>/login</code> показывает форму. POST читает <code>username</code> и <code>password</code>, ищет пользователя и проверяет пароль.</p>
+<p>После успешной проверки создаётся идентификатор сессии:</p>
+<pre><code class="language-go">bytes := make([]byte, 32)
+_, err := rand.Read(bytes)
+sessionID := hex.EncodeToString(bytes)
+</code></pre>
+<p>В памяти сервера хранится соответствие:</p>
+<pre><code class="language-go">sessions map[string]int64
+</code></pre>
+<p>Ключ 
+ случайный идентификатор сессии, значение ID пользователя. это напоминает словарь Python. Доступ к общей <code>map</code> защищён <code>sync.RWMutex</code>, потому что HTTP-запросы могут обрабатываться одновременно.</p>
+<p>Браузеру отправляется cookie:</p>
+<pre><code class="language-go">http.SetCookie(w, &amp;http.Cookie{
+    Name:     &quot;session_id&quot;,
+    Value:    sessionID,
+    Path:     &quot;/&quot;,
+    HttpOnly: true,
+    SameSite: http.SameSiteLaxMode,
+})
+</code></pre>
+<p>В следующих запросах браузер передаёт cookie обратно. <code>CurrentUser</code> находит сессию, получает ID и загружает пользователя из БД. После перезапуска сервера карта сессий пустая, поэтому потребуется новый вход.</p>
+<p>Несмотря на имя <code>PasswordHash</code>, текущая версия сохраняет пароль без хэширования и сравнивает строки.</p>
+<p><img alt="alt text" src="Images/image-21.png" />
+<img alt="alt text" src="Images/image-22.png" /></p>
+<h3 id="_12">Проверка на сервере<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
+<p>Изменение заданий и административные страницы подключены через <code>RequireAdmin</code>:</p>
+<pre><code class="language-go">mux.HandleFunc(&quot;POST /homeworks/create&quot;, auth.RequireAdmin(homeworkView.Create))
+</code></pre>
+<p><code>RequireAdmin</code> возвращает новый обработчик, который сначала проверяет сессию и роль.</p>
+<pre><code class="language-go">if !user.IsAdmin {
+    http.Error(w, &quot;Доступ запрещен&quot;, http.StatusForbidden)
+    return
+}
+next(w, r)
+</code></pre>
+<p>Если сессии нет, браузер перенаправляется на <code>/login</code>. Если пользователь вошёл, но не является администратором, возвращается 403. Только после проверки вызывается исходный обработчик.</p>
+<h3 id="_13">Проверка в шаблоне<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
+<p>Кнопки редактирования и удаления показываются по условию:</p>
+<pre><code class="language-html">{{ if .User.IsAdmin }}
+    &lt;a href=&quot;/homework/{{ .Homework.ID }}/update&quot;&gt;Редактировать&lt;/a&gt;
+    &lt;a href=&quot;/homework/{{ .Homework.ID }}/delete&quot;&gt;Удалить&lt;/a&gt;
+{{ end }}
+</code></pre>
+<p>В списке аналогично показывается кнопка создания. Это выполняет клиентскую часть разграничения прав из задания. При этом ручной переход по адресу дополнительно защищён серверным обработчиком.</p>
+<p>Выход удаляет сессию из <code>map</code>, отправляет cookie с <code>MaxAge: -1</code> и перенаправляет на <code>/login</code>.</p>
+<p><img alt="alt text" src="Images/image-23.png" />
+<img alt="alt text" src="Images/image-25.png" />
+<img alt="alt text" src="Images/image-24.png" /></p>
+<hr />
+<h2 id="_14">Пагинация, поиск и фильтрация<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h2>
+<h3 id="_15">Пагинация<a class="headerlink" href="#_15" title="Permanent link">&para;</a></h3>
+<p>В <code>HomeworkView.List</code> на одной странице показывается до пяти заданий:</p>
+<pre><code class="language-go">const limit = 5
+pageStr := r.URL.Query().Get(&quot;page&quot;)
+</code></pre>
+<p>Если <code>page</code> не передан, некорректен или меньше единицы, используется первая страница. Количество страниц и смещение вычисляются так:</p>
+<pre><code class="language-go">totalPages := int((count + int64(limit) - 1) / int64(limit))
+offset := (page - 1) * limit
+</code></pre>
+<p>Например, для 12 записей получаются три страницы. На второй странице <code>offset = 5</code>: первые пять записей пропускаются. Если результатов нет, код оставляет одну пустую страницу. Если запрошенная страница больше последней, используется последняя.</p>
+<p>В GORM применяются:</p>
+<pre><code class="language-go">query.Limit(limit).Offset(offset).Find(&amp;homeworks)
+</code></pre>
+<p>В шаблон также передаются <code>HasPrev</code>, <code>HasNext</code>, <code>PrevPage</code>, <code>NextPage</code>, <code>Page</code> и <code>TotalPages</code>. По ним показываются ссылки «Предыдущая» и «Следующая».</p>
+<p><img alt="alt text" src="Images/image-26.png" />
+<img alt="alt text" src="Images/image-27.png" /></p>
+<h3 id="_16">Поиск и фильтр<a class="headerlink" href="#_16" title="Permanent link">&para;</a></h3>
+<p>Параметры читаются из URL:</p>
+<pre><code class="language-go">search := r.URL.Query().Get(&quot;search&quot;)
+subject := r.URL.Query().Get(&quot;subject&quot;)
+</code></pre>
+<p>Поиск проверяет предмет и текст задания:</p>
+<pre><code class="language-go">searchValue := &quot;%&quot; + search + &quot;%&quot;
+query = query.Where(
+    &quot;subject ILIKE ? OR text ILIKE ?&quot;,
+    searchValue,
+    searchValue,
+)
+</code></pre>
+<p><code>ILIKE</code> в PostgreSQL выполняет сравнение без учёта регистра. Знаки <code>%</code> ищет подтекст строки. Значения передаются параметрами на места <code>?</code>.</p>
+<p>Фильтр по предмету использует точное совпадение:</p>
+<pre><code class="language-go">query = query.Where(&quot;subject = ?&quot;, subject)
+</code></pre>
+<p>Примеры адресов:</p>
+<pre><code class="language-text">/homeworks?search=интеграл
+/homeworks?subject=Математика
+/homeworks?search=интеграл&amp;subject=Математика&amp;page=2
+</code></pre>
+<p>Методы <code>CountFiltered</code> и <code>GetPageFiltered</code> используют одинаковые условия. Первый считает подходящие записи, второй возвращает только нужную страницу. Это нужно, чтобы число страниц совпадало с результатом фильтрации.</p>
+<h3 id="_17">Сохранение параметров при переходе<a class="headerlink" href="#_17" title="Permanent link">&para;</a></h3>
+<p>В ссылку следующей страницы включены оба поля фильтра:</p>
+<pre><code class="language-html">&lt;a href=&quot;/homeworks?page={{ .NextPage }}&amp;search={{ .Search }}&amp;subject={{ .Subject }}&quot;&gt;
+    Следующая →
+&lt;/a&gt;
+</code></pre>
+<p>Поэтому переход не сбрасывает поиск. Кнопка Сбросить ведёт на <code>/homeworks</code> без параметров.
+<img alt="alt text" src="Images/image-28.png" /></p>
+<hr />
+<h2 id="_18">Оформление и реализованные интерфейсы<a class="headerlink" href="#_18" title="Permanent link">&para;</a></h2>
+<p>В каждый HTML-шаблон подключён Bootstrap 5.3.8 через CDN.</p>
+<p>Ниже перечислены все страницы. В колонке «Доступ» указан доступ по текущим маршрутам, а не только наличие ссылки в меню.</p>
+<table>
+<thead>
+<tr>
+<th>Адрес</th>
+<th>Шаблон в <code>web/templates/</code></th>
+<th>Что показывает или делает</th>
+<th>Доступ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/login</code></td>
+<td><code>login.html</code></td>
+<td>Вход</td>
+<td>Публичный</td>
+</tr>
+<tr>
+<td><code>/users</code></td>
+<td><code>users.html</code></td>
+<td>Список пользователей и новых атрибутов</td>
+<td>Публичный</td>
+</tr>
+<tr>
+<td><code>/users/create</code></td>
+<td><code>user_create.html</code></td>
+<td>Создание обычного пользователя</td>
+<td>Публичный</td>
+</tr>
+<tr>
+<td><code>/homeworks</code></td>
+<td><code>homeworks.html</code></td>
+<td>Список, поиск, фильтр, страницы</td>
+<td>Публичный; кнопка создания для администратора</td>
+</tr>
+<tr>
+<td><code>/homework/{id}</code></td>
+<td><code>homework.html</code></td>
+<td>Карточка задания</td>
+<td>Публичный; кнопки изменения для администратора</td>
+</tr>
+<tr>
+<td><code>/homeworks/create</code></td>
+<td><code>homework_create.html</code></td>
+<td>Создание задания</td>
+<td>Администратор</td>
+</tr>
+<tr>
+<td><code>/homework/{id}/update</code></td>
+<td><code>homework_update.html</code></td>
+<td>Обновление задания</td>
+<td>Администратор</td>
+</tr>
+<tr>
+<td><code>/homework/{id}/delete</code></td>
+<td><code>homework_delete.html</code></td>
+<td>Подтверждение и удаление</td>
+<td>Администратор</td>
+</tr>
+<tr>
+<td><code>/admin</code></td>
+<td><code>admin/index.html</code></td>
+<td>Разделы панели администратора</td>
+<td>Администратор</td>
+</tr>
+<tr>
+<td><code>/admin/users</code></td>
+<td><code>admin/users.html</code></td>
+<td>Список пользователей с ролью</td>
+<td>Администратор</td>
+</tr>
+<tr>
+<td><code>/admin/users/create</code></td>
+<td><code>admin/user_create.html</code></td>
+<td>Создание пользователя с выбором роли</td>
+<td>Администратор</td>
+</tr>
+<tr>
+<td><code>/admin/homeworks</code></td>
+<td><code>admin/homeworks.html</code></td>
+<td>Поля всех домашних заданий</td>
+<td>Администратор</td>
+</tr>
+<tr>
+<td><code>/admin/homeworks/create</code></td>
+<td><code>admin/homework_create.html</code></td>
+<td>Административная форма задания</td>
+<td>Администратор</td>
+</tr>
+<tr>
+<td><code>/admin/submissions</code></td>
+<td><code>admin/submissions.html</code></td>
+<td>Список сдач</td>
+<td>Администратор</td>
+</tr>
+<tr>
+<td><code>/admin/submissions/create</code></td>
+<td><code>admin/submission_create.html</code></td>
+<td>Создание сдачи</td>
+<td>Администратор</td>
+</tr>
+</tbody>
+</table>
+<p>У <code>/logout</code> своего шаблона нет: обработчик завершает сессию и перенаправляет на <code>/login</code>.</p>
+<hr /></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
