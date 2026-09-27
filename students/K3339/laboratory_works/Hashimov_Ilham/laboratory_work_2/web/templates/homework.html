@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Домашнее задание</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body class="bg-light text-dark">
+    <nav class="navbar navbar-expand bg-white border-bottom shadow-sm">
+        <div class="container d-flex flex-wrap gap-3">
+            <a class="navbar-brand fw-semibold text-dark mb-0" href="/homeworks">Учебный портал</a>
+            <div class="navbar-nav flex-row gap-3">
+                <a class="nav-link" href="/homeworks">Домашние задания</a>
+                <a class="nav-link" href="/users">Пользователи</a>
+            </div>
+        </div>
+    </nav>
+    <main class="container py-4 py-md-5">
+
+    {{ if .IsLogged }}
+        <p>
+            Вы вошли как: {{ .User.Username }}
+            |
+            <a class="btn btn-outline-secondary btn-sm" href="/logout">Выйти</a>
+        </p>
+    {{ else }}
+        <p>
+            <a class="btn btn-outline-primary btn-sm" href="/login">Войти</a>
+        </p>
+    {{ end }}
+
+    <h1 class="h2 fw-semibold mb-4">{{ .Homework.Subject }}</h1>
+
+    <p class="bg-white border rounded shadow-sm p-3"><b>Описание:</b> {{ .Homework.Text }}</p>
+    <p><b>Дата выдачи:</b> {{ .Homework.IssueDate }}</p>
+    <p><b>Начало выполнения:</b> {{ .Homework.StartDate }}</p>
+    <p><b>Срок сдачи:</b> {{ .Homework.EndDate }}</p>
+    <p><b>Штраф:</b> {{ .Homework.Penalty }}</p>
+
+    {{ if .User.IsAdmin }}
+        <a class="btn btn-outline-primary me-2" href="/homework/{{ .Homework.ID }}/update">Редактировать</a>
+        <a class="btn btn-outline-danger" href="/homework/{{ .Homework.ID }}/delete">Удалить</a>
+    {{ end }}
+
+    <p>
+        <a class="btn btn-outline-secondary" href="/homeworks">Назад к списку</a>
+    </p>
+
+    </main>
+</body>
+</html>

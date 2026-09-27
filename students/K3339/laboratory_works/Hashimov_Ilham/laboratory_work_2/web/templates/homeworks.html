@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Домашние задания</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body class="bg-light text-dark">
+    <nav class="navbar navbar-expand bg-white border-bottom shadow-sm">
+        <div class="container d-flex flex-wrap gap-3">
+            <a class="navbar-brand fw-semibold text-dark mb-0" href="/homeworks">Учебный портал</a>
+            <div class="navbar-nav flex-row gap-3">
+                <a class="nav-link" href="/homeworks">Домашние задания</a>
+                <a class="nav-link" href="/users">Пользователи</a>
+            </div>
+        </div>
+    </nav>
+    <main class="container py-4 py-md-5">
+    {{ if .IsLogged }}
+        <p class="d-flex align-items-center gap-2 mb-3">
+            Вы вошли как: {{ .User.Username }}
+            |
+            <a class="btn btn-outline-secondary btn-sm" href="/logout">Выйти</a>
+        </p>
+    {{ else }}
+        <a class="btn btn-outline-primary btn-sm" href="/login">Войти</a>
+    {{ end }}
+        {{ if .User.IsAdmin }}
+        <a class="btn btn-primary mb-3" href="/homeworks/create">Создать домашнее задание</a>
+        <br><br>
+    {{ end }}
+    <form class="card border-0 shadow-sm p-4 mb-4" method="GET" action="/homeworks">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <input class="form-control"
+                    type="text"
+                    name="search"
+                    value="{{ .Search }}"
+                    placeholder="Поиск"
+                    aria-label="Поиск"
+                >
+            </div>
+            <div class="col-md-4">
+                <input class="form-control"
+                    type="text"
+                    name="subject"
+                    value="{{ .Subject }}"
+                    placeholder="Предмет"
+                    aria-label="Предмет"
+                >
+            </div>
+            <div class="col-md-auto d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Найти</button>
+                <a class="btn btn-outline-secondary" href="/homeworks">Сбросить</a>
+            </div>
+        </div>
+    </form>
+    <h1 class="h2 fw-semibold mb-4">Домашние задания</h1>
+
+    {{ range .Homeworks }}
+        <p class="bg-white border rounded shadow-sm p-3 mb-3">
+            <b>Предмет:</b>
+            <a href="/homework/{{ .ID }}">{{ .Subject }}</a>
+            <br>
+
+            <b>Описание:</b> {{ .Text }}
+            <br>
+
+            <b>Начало:</b> {{ .StartDate }}
+            <br>
+
+            <b>Срок сдачи:</b> {{ .EndDate }}
+            <br>
+
+            <b>Штраф:</b> {{ .Penalty }}
+        </p>
+
+        <hr class="my-4">
+    {{ end }}
+    <p class="d-flex flex-wrap align-items-center gap-3 mt-4">
+    {{ if .HasPrev }}
+        <a class="btn btn-outline-secondary btn-sm" href="/homeworks?page={{ .PrevPage }}&search={{ .Search }}&subject={{ .Subject }}">
+            ← Предыдущая
+        </a>
+    {{ end }}
+
+    Страница {{ .Page }} из {{ .TotalPages }}
+
+    {{ if .HasNext }}
+        <a class="btn btn-outline-secondary btn-sm" href="/homeworks?page={{ .NextPage }}&search={{ .Search }}&subject={{ .Subject }}">
+            Следующая →
+        </a>
+    {{ end }}
+    </p>
+    </main>
+</body>
+</html>

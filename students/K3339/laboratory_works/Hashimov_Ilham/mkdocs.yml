@@ -1,0 +1,39 @@
+site_name: Веб-программирование · K3339
+site_author: Hashimov Ilham
+site_description: Отчёты по лабораторным работам
+site_url: https://ilhamVode.github.io/ITMO_ICT_WebDevelopment_2026-2027/
+repo_url: https://github.com/ilhamVode/ITMO_ICT_WebDevelopment_2026-2027
+edit_uri: ''
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: mkdocs
+  locale: ru
+
+nav:
+  - Главная: index.md
+  - ЛР1. Сокеты: lab1/index.md
+  - ЛР2. Доска домашних заданий: lab2/index.md
+  - ЛР3. API: lab3.md
+  - ЛР4. Клиентское приложение: lab4.md
+
+markdown_extensions:
+  - tables
+  - fenced_code
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+
+validation:
+  nav:
+    not_found: warn
+  links:
+    not_found: warn
+    anchors: warn
+
+remote_branch: gh-pages
+remote_name: origin

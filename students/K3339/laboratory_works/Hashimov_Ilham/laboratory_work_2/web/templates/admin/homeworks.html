@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Домашние задания</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body class="bg-light text-dark">
+    <nav class="navbar navbar-expand bg-white border-bottom shadow-sm">
+        <div class="container d-flex flex-wrap gap-3">
+            <a class="navbar-brand fw-semibold text-dark mb-0" href="/homeworks">Учебный портал</a>
+            <div class="navbar-nav flex-row gap-3">
+                <a class="nav-link" href="/homeworks">Домашние задания</a>
+                <a class="nav-link" href="/users">Пользователи</a>
+            </div>
+        </div>
+    </nav>
+    <main class="container py-4 py-md-5">
+    <h1 class="h2 fw-semibold mb-4">Домашние задания</h1>
+
+    <a class="btn btn-primary mb-3" href="/admin/homeworks/create">Создать домашнее задание</a>
+    <br><br>
+
+    {{ range . }}
+        <p class="bg-white border rounded shadow-sm p-3 mb-3">
+            ID: {{ .ID }}<br>
+            Предмет: {{ .Subject }}<br>
+            ID преподавателя: {{ .TeacherID }}<br>
+            Дата публикации: {{ .IssueDate }}<br>
+            Дата начала: {{ .StartDate }}<br>
+            Дата окончания: {{ .EndDate }}<br>
+            Описание: {{ .Text }}<br>
+            Штраф: {{ .Penalty }}
+        </p>
+        <hr class="my-4">
+    {{ end }}
+
+    <a class="btn btn-outline-secondary" href="/admin">Назад в админку</a>
+    </main>
+</body>
+</html>

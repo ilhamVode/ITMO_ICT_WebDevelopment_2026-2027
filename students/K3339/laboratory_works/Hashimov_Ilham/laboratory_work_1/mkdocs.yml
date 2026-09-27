@@ -1,4 +1,4 @@
-site_name: Laboratory Work 1
-
-nav:
-  - Laboratory Work 1: index.md
+# Старый путь оставлен рабочим: теперь он тоже собирает все лабораторные.
+INHERIT: ../mkdocs.yml
+docs_dir: ../docs
+site_dir: ../site

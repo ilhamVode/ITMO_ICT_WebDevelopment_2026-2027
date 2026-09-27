@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель администратора</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body class="bg-light text-dark">
+    <nav class="navbar navbar-expand bg-white border-bottom shadow-sm">
+        <div class="container d-flex flex-wrap gap-3">
+            <a class="navbar-brand fw-semibold text-dark mb-0" href="/homeworks">Учебный портал</a>
+            <div class="navbar-nav flex-row gap-3">
+                <a class="nav-link" href="/homeworks">Домашние задания</a>
+                <a class="nav-link" href="/users">Пользователи</a>
+            </div>
+        </div>
+    </nav>
+    <main class="container py-4 py-md-5">
+    <h1 class="h2 fw-semibold mb-4">Панель администратора</h1>
+
+    <div class="bg-white border rounded shadow-sm p-4 mb-3">
+    <h2 class="h5 fw-semibold mb-3">Пользователи</h2>
+    <a href="/admin/users">
+        <button class="btn btn-outline-primary me-2 mb-2">Список пользователей</button>
+    </a>
+
+    <a href="/admin/users/create">
+        <button class="btn btn-outline-primary me-2 mb-2">Создать пользователя</button>
+    </a>
+    </div>
+
+    <div class="bg-white border rounded shadow-sm p-4 mb-3">
+    <h2 class="h5 fw-semibold mb-3">Домашние задания</h2>
+    <a href="/admin/homeworks">
+        <button class="btn btn-outline-primary me-2 mb-2">Список домашних заданий</button>
+    </a>
+
+    <a href="/admin/homeworks/create">
+        <button class="btn btn-outline-primary me-2 mb-2">Создать домашнее задание</button>
+    </a>
+    </div>
+
+    <div class="bg-white border rounded shadow-sm p-4 mb-3">
+    <h2 class="h5 fw-semibold mb-3">Сдачи</h2>
+    <a href="/admin/submissions">
+        <button class="btn btn-outline-primary me-2 mb-2">Список сдач</button>
+    </a>
+
+    <a href="/admin/submissions/create">
+        <button class="btn btn-outline-primary me-2 mb-2">Создать сдачу</button>
+    </a>
+    </div>
+    </main>
+</body>
+</html>
