@@ -90,6 +90,46 @@
             
             <li class="nav-item" data-bs-level="1"><a href="#no3" class="nav-link">Лабораторная работа №3</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#12" class="nav-link">Вариант 12. Учебная часть колледжа</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#task-1" class="nav-link">Task 1. Создание и запуск проекта</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#task-2" class="nav-link">Task 2. Модель данных</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#31-orm" class="nav-link">Практика 3.1. Запросы ORM и связи</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#32-rest-api" class="nav-link">Практика 3.2. REST API и сериализация</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_2" class="nav-link">Авторизация по токенам</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_3" class="nav-link">Вложенные объекты</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#task-3-12" class="nav-link">Task 3. Аналитические запросы варианта 12</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#task-4" class="nav-link">Task 4. Семестровые оценки и ведомость</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_8" class="nav-link">Проверки данных, отчисление и увольнение</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -97,7 +137,683 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="no3">Лабораторная работа №3<a class="headerlink" href="#no3" title="Permanent link">&para;</a></h1></div>
+<h1 id="no3">Лабораторная работа №3<a class="headerlink" href="#no3" title="Permanent link">&para;</a></h1>
+<h2 id="12">Вариант 12. Учебная часть колледжа<a class="headerlink" href="#12" title="Permanent link">&para;</a></h2>
+<p>В третьей работе реализован REST API для учебной части колледжа. В нём хранятся группы, студенты, преподаватели, дисциплины, кабинеты, назначения, расписание и семестровые оценки. Работа на Go, с GORM и PostgreSQL.</p>
+<p>Ниже приведены ответы, полученные при проверке обработчиков с настоящей PostgreSQL на тестовых данных. Они оформлены как запрос, HTTP-статус и тело ответа, без служебных заголовков. Значение токена заменено на <code>&lt;token&gt;</code>. ID относятся к тестовой базе, в другой базе они могут отличаться.</p>
+<hr />
+<h2 id="task-1">Task 1. Создание и запуск проекта<a class="headerlink" href="#task-1" title="Permanent link">&para;</a></h2>
+<p>Проект находится в <code>laboratory_work_3</code>. Основные файлы:</p>
+<pre><code class="language-text">laboratory_work_3/
+├── cmd/server/
+│   ├── main.go
+│   ├── urls.go
+│   └── api_test.go
+├── internal/
+│   ├── student/, group/, teacher/, classroom/, subject/
+│   ├── semester/, teaching/, schedule/, grade/
+│   ├── analytics/, report/, auth/
+│   ├── httpapi/http.go
+│   └── database/
+├── migrations/
+│   ├── init.sql
+│   └── business_rules.sql
+├── .env.example
+├── .gitignore
+├── go.mod
+└── go.sum
+</code></pre>
+<p>В папке каждой сущности находятся <code>model.go</code>, <code>repository.go</code>, <code>service.go</code> и <code>handler.go</code>. Модель описывает данные, репозиторий выполняет запросы к БД, сервис проверяет данные, обработчик принимает HTTP-запрос и формирует ответ.</p>
+<p>В <code>main.go</code> подключение создаётся через <code>database.NewPostgres(dsn)</code>. Затем <code>database.InitSchema(db)</code> применяет оба SQL-файла в одной транзакции. Таблицы создаются через <code>CREATE TABLE IF NOT EXISTS</code>, поэтому повторный запуск не удаляет записи. Функции и триггеры обновляются через <code>CREATE OR REPLACE</code>.</p>
+<p>В отличие от Django, здесь нет команд <code>makemigrations</code> и <code>migrate</code>: схема написана в SQL и применяется кодом приложения. GORM используется для работы с моделями и запросами.</p>
+<p>Проверка доступности сервера:</p>
+<pre><code class="language-powershell">curl.exe http://localhost:8080/health
+</code></pre>
+<pre><code class="language-text">GET /health
+HTTP 200 OK
+{
+  &quot;status&quot;: &quot;ok&quot;
+}
+</code></pre>
+<hr />
+<h2 id="task-2">Task 2. Модель данных<a class="headerlink" href="#task-2" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Таблица</th>
+<th>Основные поля</th>
+<th>Назначение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>study_groups</code></td>
+<td><code>name</code>, <code>course</code></td>
+<td>Учебная группа и курс</td>
+</tr>
+<tr>
+<td><code>students</code></td>
+<td>Имя, фамилия, <code>birth_date</code>, <code>group_id</code>, <code>is_active</code></td>
+<td>Студент и его группа</td>
+</tr>
+<tr>
+<td><code>classrooms</code></td>
+<td><code>number</code>, <code>building</code></td>
+<td>Кабинет и корпус</td>
+</tr>
+<tr>
+<td><code>teachers</code></td>
+<td>ФИО, <code>fixed_classroom_id</code>, <code>is_active</code></td>
+<td>Преподаватель; собственного кабинета может не быть</td>
+</tr>
+<tr>
+<td><code>subjects</code></td>
+<td><code>name</code></td>
+<td>Дисциплина</td>
+</tr>
+<tr>
+<td><code>semesters</code></td>
+<td><code>academic_year</code>, <code>number</code></td>
+<td>Учебный год и семестр</td>
+</tr>
+<tr>
+<td><code>teaching_assignments</code></td>
+<td><code>teacher_id</code>, <code>subject_id</code>, <code>group_id</code>, <code>semester_id</code></td>
+<td>Кто, что и какой группе преподаёт за семестр</td>
+</tr>
+<tr>
+<td><code>schedules</code></td>
+<td><code>assignment_id</code>, <code>classroom_id</code>, <code>weekday</code>, <code>lesson_number</code></td>
+<td>Занятие в расписании</td>
+</tr>
+<tr>
+<td><code>grades</code></td>
+<td><code>student_id</code>, <code>subject_id</code>, <code>semester_id</code>, <code>value</code></td>
+<td>Итоговая оценка за семестр</td>
+</tr>
+<tr>
+<td><code>api_users</code></td>
+<td><code>username</code>, <code>password_hash</code></td>
+<td>Пользователь API</td>
+</tr>
+<tr>
+<td><code>api_tokens</code></td>
+<td><code>key</code>, <code>user_id</code>, <code>expires_at</code></td>
+<td>Хеш токена, пользователь и срок действия</td>
+</tr>
+</tbody>
+</table>
+<p>У каждой предметной сущности есть первичный ключ <code>id</code>. Связи заданы внешними ключами в <code>init.sql</code>:</p>
+<pre><code class="language-text">study_groups ──&lt; students
+teachers ──&lt; teaching_assignments &gt;── subjects
+study_groups ──&lt; teaching_assignments &gt;── semesters
+teaching_assignments ──&lt; schedules &gt;── classrooms
+students ──&lt; grades &gt;── subjects
+semesters ──&lt; grades
+classrooms ──&lt; teachers.fixed_classroom_id
+api_users ──&lt; api_tokens
+</code></pre>
+<p>Здесь <code>──&lt;</code> обозначает связь «один ко многим». Например, у одной группы может быть несколько студентов, а каждый студент относится к одной группе. Основные связи модели:</p>
+<table>
+<thead>
+<tr>
+<th>Связь</th>
+<th>Тип</th>
+<th>Как хранится в БД</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Группа → студенты</td>
+<td>1:m</td>
+<td><code>students.group_id</code> ссылается на <code>study_groups.id</code></td>
+</tr>
+<tr>
+<td>Преподаватель, дисциплина, группа, семестр → назначения</td>
+<td>Каждая 1:m</td>
+<td>Четыре внешних ключа в <code>teaching_assignments</code></td>
+</tr>
+<tr>
+<td>Назначение → занятия; кабинет → занятия</td>
+<td>Каждая 1:m</td>
+<td><code>schedules.assignment_id</code> и <code>schedules.classroom_id</code></td>
+</tr>
+<tr>
+<td>Студент, дисциплина, семестр → оценки</td>
+<td>Каждая 1:m</td>
+<td>Три внешних ключа в <code>grades</code></td>
+</tr>
+<tr>
+<td>Кабинет → закреплённые преподаватели</td>
+<td>1:m, кабинет необязателен</td>
+<td><code>teachers.fixed_classroom_id</code> допускает <code>NULL</code></td>
+</tr>
+<tr>
+<td>Пользователь → токены</td>
+<td>1:m</td>
+<td><code>api_tokens.user_id</code></td>
+</tr>
+<tr>
+<td>Преподаватели ↔ дисциплины; преподаватели ↔ группы; группы ↔ дисциплины</td>
+<td>Каждая m:m</td>
+<td>Через назначения <code>teaching_assignments</code>, с учётом семестра</td>
+</tr>
+<tr>
+<td>Студенты ↔ дисциплины, по которым выставлены оценки</td>
+<td>m:m</td>
+<td>Через <code>grades</code>, где также хранятся семестр и значение оценки</td>
+</tr>
+</tbody>
+</table>
+<p>Связь преподавателей и дисциплин является m2m: преподаватель ведёт несколько дисциплин, одну дисциплину ведут разные преподаватели. Промежуточная модель <code>TeachingAssignment</code> дополнительно хранит группу и семестр. По назначению это соответствует <code>through</code> в Django.</p>
+<p>Пример модели:</p>
+<pre><code class="language-go">type TeachingAssignment struct {
+    ID         int64 `gorm:&quot;primaryKey;column:id&quot; json:&quot;id&quot;`
+    TeacherID  int64 `gorm:&quot;column:teacher_id&quot; json:&quot;teacher_id&quot;`
+    SubjectID  int64 `gorm:&quot;column:subject_id&quot; json:&quot;subject_id&quot;`
+    GroupID    int64 `gorm:&quot;column:group_id&quot; json:&quot;group_id&quot;`
+    SemesterID int64 `gorm:&quot;column:semester_id&quot; json:&quot;semester_id&quot;`
+
+    Subject *subject.Subject `gorm:&quot;foreignKey:SubjectID;references:ID&quot; json:&quot;subject,omitempty&quot;`
+}
+</code></pre>
+<p>Теги <code>gorm</code> задают связь с таблицей и колонками. Теги <code>json</code> задают названия полей ответа. Указатель, например <code>*int64</code> у <code>FixedClassroomID</code>, позволяет хранить <code>nil</code>, то есть SQL <code>NULL</code>: у преподавателя может не быть кабинета.</p>
+<p>В БД нельзя повторно создать группу с тем же названием, кабинет с той же парой «номер + корпус», одинаковое назначение или вторую оценку студенту по той же дисциплине за тот же семестр.</p>
+<hr />
+<h2 id="31-orm">Практика 3.1. Запросы ORM и связи<a class="headerlink" href="#31-orm" title="Permanent link">&para;</a></h2>
+<p>Запросы разобраны на моделях выбранного варианта. Создание, получение и фильтрация через GORM имеют вид:</p>
+<pre><code class="language-go">err := db.WithContext(ctx).Create(&amp;student).Error
+err := db.WithContext(ctx).First(&amp;student, id).Error
+err := db.WithContext(ctx).Order(&quot;id ASC&quot;).Find(&amp;students).Error
+err := db.WithContext(ctx).Where(&quot;group_id = ?&quot;, groupID).Find(&amp;students).Error
+</code></pre>
+<p>Это соответствует операциям <code>objects.create</code>, <code>get</code>, <code>all</code> и <code>filter</code> в Django. <code>&amp;student</code> передаёт адрес структуры, чтобы ORM мог заполнить её, включая ID созданной записи. Ошибка возвращается значением <code>error</code>, а не исключением.</p>
+<p>Вместо <code>related_name</code> обратная связь описана полем структуры и тегом внешнего ключа:</p>
+<pre><code class="language-go">Students []student.Student `gorm:&quot;foreignKey:GroupID;references:ID&quot; json:&quot;students,omitempty&quot;`
+</code></pre>
+<p><code>Students</code> не является отдельной колонкой. Для загрузки связанных студентов используется <code>Preload("Students")</code>, а для дисциплин преподавателя — <code>Preload("Assignments.Subject")</code>.</p>
+<p>Агрегационный запрос считает студентов по курсам:</p>
+<pre><code class="language-sql">SELECT g.course, COUNT(DISTINCT st.id) AS student_count
+FROM schedules sc
+JOIN teaching_assignments ta ON ta.id = sc.assignment_id
+JOIN study_groups g ON g.id = ta.group_id
+JOIN students st ON st.group_id = g.id
+WHERE sc.classroom_id = ? AND ta.semester_id = ? AND st.is_active = TRUE
+GROUP BY g.course
+ORDER BY g.course;
+</code></pre>
+<p>Он находится в <code>internal/analytics/repository.go</code>. <code>DISTINCT</code> исключает повторный подсчёт студента, если у его группы несколько занятий в одном кабинете. Значения передаются параметрами, на места <code>?</code>.</p>
+<hr />
+<h2 id="32-rest-api">Практика 3.2. REST API и сериализация<a class="headerlink" href="#32-rest-api" title="Permanent link">&para;</a></h2>
+<p>Общий путь запроса:</p>
+<pre><code class="language-text">HTTP-клиент → ServeMux → проверка токена → Handler → Service → Repository → PostgreSQL
+                              ← JSON-ответ ←
+</code></pre>
+<p>Маршруты связываются с методами обработчиков:</p>
+<pre><code class="language-go">mux.HandleFunc(&quot;GET /api/students/{id}&quot;, h.GetByID)
+mux.HandleFunc(&quot;POST /api/students&quot;, h.Create)
+mux.HandleFunc(&quot;PUT /api/students/{id}&quot;, h.Update)
+mux.HandleFunc(&quot;DELETE /api/students/{id}&quot;, h.Delete)
+</code></pre>
+<p>Вместо <code>APIView</code> и generic-классов DRF используются методы структур. Вместо отдельного класса сериализатора JSON читается в структуру запроса, проверяется сервисом и преобразуется в модель. Ответ сериализуется через стандартный <code>encoding/json</code>:</p>
+<pre><code class="language-go">var req gradeRequest
+err := httpapi.ReadJSON(w, r, &amp;req)
+grade := req.ToModel()
+err = h.service.Create(r.Context(), &amp;grade)
+httpapi.WriteJSON(w, http.StatusCreated, grade)
+</code></pre>
+<p>Это отдельные строки основного пути обработки; в полном обработчике после каждого действия проверяется <code>err</code>. Неизвестные поля и лишний JSON-объект в теле запроса отклоняются. Даты рождения принимаются в формате <code>YYYY-MM-DD</code>.</p>
+<h3 id="crud-">CRUD-эндпоинты<a class="headerlink" href="#crud-" title="Permanent link">&para;</a></h3>
+<p>Для каждого ресурса реализованы пять операций: <code>GET /api/&lt;ресурс&gt;</code> — список, <code>GET /api/&lt;ресурс&gt;/{id}</code> — объект, <code>POST</code> на список — создание, <code>PUT</code> по ID — полное обновление, <code>DELETE</code> по ID — удаление.</p>
+<table>
+<thead>
+<tr>
+<th>Ресурс</th>
+<th>Поля JSON при создании и обновлении</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>groups</code></td>
+<td><code>name</code>, <code>course</code></td>
+</tr>
+<tr>
+<td><code>students</code></td>
+<td><code>first_name</code>, <code>last_name</code>, <code>group_id</code>, необязательный <code>birth_date</code></td>
+</tr>
+<tr>
+<td><code>teachers</code></td>
+<td><code>first_name</code>, <code>last_name</code>, необязательные <code>middle_name</code>, <code>fixed_classroom_id</code></td>
+</tr>
+<tr>
+<td><code>classrooms</code></td>
+<td><code>number</code>, <code>building</code></td>
+</tr>
+<tr>
+<td><code>subjects</code></td>
+<td><code>name</code></td>
+</tr>
+<tr>
+<td><code>semesters</code></td>
+<td><code>academic_year</code> в виде <code>2026-2027</code>, <code>number</code> — 1 или 2</td>
+</tr>
+<tr>
+<td><code>teachings</code></td>
+<td><code>teacher_id</code>, <code>subject_id</code>, <code>group_id</code>, <code>semester_id</code></td>
+</tr>
+<tr>
+<td><code>schedules</code></td>
+<td><code>assignment_id</code>, <code>classroom_id</code>, <code>weekday</code> — 1–7, <code>lesson_number</code></td>
+</tr>
+<tr>
+<td><code>grades</code></td>
+<td><code>student_id</code>, <code>subject_id</code>, <code>semester_id</code>, <code>value</code> — 2–5</td>
+</tr>
+</tbody>
+</table>
+<p>У студентов и преподавателей при создании <code>is_active</code> устанавливается в <code>true</code>. При <code>PUT</code> это поле обязательно передаётся явно. <code>null</code> можно передать для необязательной даты рождения, отчества и закреплённого кабинета. Частичного обновления через <code>PATCH</code> в текущем API нет.</p>
+<p>Чтение возвращает <code>200</code>, создание — <code>201</code> и заголовок <code>Location</code>, обновление и удаление — <code>204</code> без тела. Некорректный запрос получает <code>400</code>, отсутствующий объект — <code>404</code>, повторная запись или конфликт расписания — <code>409</code>.</p>
+<h3 id="_1">Создание объектов<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p>Для примеров подготовлены группы К3339, К2339, К1339; два преподавателя; дисциплины «Математика» и «Физика»; кабинеты 301 и 302; два семестра. В группе К3339 находятся Ильхам Хашимов и Анна Иванова. Все эти объекты создаются через API.</p>
+<pre><code class="language-text">POST /api/groups
+{&quot;course&quot;:3,&quot;name&quot;:&quot;К3339&quot;}
+HTTP 201 Created
+{&quot;id&quot;:1,&quot;name&quot;:&quot;К3339&quot;,&quot;course&quot;:3}
+</code></pre>
+<pre><code class="language-text">POST /api/students
+{&quot;birth_date&quot;:&quot;2005-01-01&quot;,&quot;first_name&quot;:&quot;Ильхам&quot;,&quot;group_id&quot;:1,&quot;last_name&quot;:&quot;Хашимов&quot;}
+HTTP 201 Created
+{&quot;birth_date&quot;:&quot;2005-01-01&quot;,&quot;first_name&quot;:&quot;Ильхам&quot;,&quot;group_id&quot;:1,&quot;id&quot;:1,&quot;is_active&quot;:true,&quot;last_name&quot;:&quot;Хашимов&quot;}
+</code></pre>
+<p>Назначение связывает преподавателя, дисциплину, группу и семестр. Расписание ссылается уже на это назначение:</p>
+<pre><code class="language-text">POST /api/teachings
+{&quot;group_id&quot;:1,&quot;semester_id&quot;:1,&quot;subject_id&quot;:1,&quot;teacher_id&quot;:1}
+HTTP 201 Created
+{&quot;id&quot;:1,&quot;teacher_id&quot;:1,&quot;subject_id&quot;:1,&quot;group_id&quot;:1,&quot;semester_id&quot;:1}
+</code></pre>
+<pre><code class="language-text">POST /api/schedules
+{&quot;assignment_id&quot;:1,&quot;classroom_id&quot;:1,&quot;lesson_number&quot;:1,&quot;weekday&quot;:1}
+HTTP 201 Created
+{&quot;id&quot;:1,&quot;assignment_id&quot;:1,&quot;classroom_id&quot;:1,&quot;weekday&quot;:1,&quot;lesson_number&quot;:1}
+</code></pre>
+<hr />
+<h2 id="_2">Авторизация по токенам<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>Регистрация, вход по токену и вывод текущего пользователя соответствуют пункту 5 задания. Djoser в Go не используется: эти действия реализованы в <code>internal/auth</code>. Выход добавлен для удаления выданного токена.</p>
+<table>
+<thead>
+<tr>
+<th>Метод и адрес</th>
+<th>Что делает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST /api/auth/users</code></td>
+<td>Регистрация; тело содержит <code>username</code>, <code>password</code></td>
+</tr>
+<tr>
+<td><code>POST /api/auth/token/login</code></td>
+<td>Вход с теми же полями, возвращает <code>auth_token</code></td>
+</tr>
+<tr>
+<td><code>GET /api/auth/users/me</code></td>
+<td>Данные текущего пользователя по токену</td>
+</tr>
+<tr>
+<td><code>POST /api/auth/token/logout</code></td>
+<td>Удаление переданного токена</td>
+</tr>
+</tbody>
+</table>
+<p>Имя пользователя содержит 3–50 байт, буквы, цифры, <code>_</code> или <code>-</code>; пароль — 8–72 байта. Пароль сохраняется как bcrypt-хеш. Токен создаётся из 32 случайных байтов, действует 24 часа, в БД хранится только его SHA-256-хеш.</p>
+<pre><code class="language-text">POST /api/auth/users
+{&quot;password&quot;:&quot;password123&quot;,&quot;username&quot;:&quot;student_test&quot;}
+HTTP 201 Created
+{&quot;id&quot;:1,&quot;username&quot;:&quot;student_test&quot;}
+</code></pre>
+<pre><code class="language-text">POST /api/auth/token/login
+{&quot;password&quot;:&quot;password123&quot;,&quot;username&quot;:&quot;student_test&quot;}
+HTTP 200 OK
+{&quot;auth_token&quot;:&quot;&lt;token&gt;&quot;}
+</code></pre>
+<p>В PowerShell токен можно получить в переменную и затем передавать заголовком:</p>
+<pre><code class="language-powershell">$base = &quot;http://localhost:8080&quot;
+$credentials = '{&quot;username&quot;:&quot;student_test&quot;,&quot;password&quot;:&quot;password123&quot;}'
+$login = Invoke-RestMethod -Method Post -Uri &quot;$base/api/auth/token/login&quot; -ContentType &quot;application/json&quot; -Body $credentials
+$headers = @{ Authorization = &quot;Token $($login.auth_token)&quot; }
+Invoke-RestMethod -Uri &quot;$base/api/auth/users/me&quot; -Headers $headers
+</code></pre>
+<pre><code class="language-text">GET /api/auth/users/me
+HTTP 200 OK
+{&quot;id&quot;:1,&quot;username&quot;:&quot;student_test&quot;}
+</code></pre>
+<p>Проверка токена подключена к учебным эндпоинтам через <code>RequireAuth</code>. Каждый запрос передаёт <code>Authorization: Token &lt;token&gt;</code>; также поддерживается <code>Bearer</code>. Роли администратора и обычного пользователя отдельно не вводились: зарегистрированные пользователи имеют одинаковый доступ к учебным данным. <code>/health</code>, регистрация и вход публичные.</p>
+<p>Выход проверялся после остальных действий с учебными данными. Запрос с прежним токеном отклоняется:</p>
+<pre><code class="language-text">POST /api/auth/token/logout
+HTTP 204 No Content
+</code></pre>
+<pre><code class="language-text">GET /api/groups
+HTTP 401 Unauthorized
+{&quot;error&quot;:&quot;требуется действующий токен или верные данные для входа&quot;}
+</code></pre>
+<hr />
+<h2 id="_3">Вложенные объекты<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h3 id="_4">Один ко многим: группа и студенты<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>Связь реализована в <code>migrations/init.sql</code>: внешний ключ <code>students.group_id</code> указывает на <code>study_groups.id</code>. В <code>internal/student/model.go</code> это поле <code>GroupID</code>, а обратная сторона связи — список <code>Students</code> в <code>internal/group/model.go</code>. В GORM тег <code>foreignKey:GroupID;references:ID</code> указывает, по каким полям связаны записи.</p>
+<p>При создании студента передаётся <code>group_id</code>, поэтому он появляется в списке студентов этой группы. Несуществующий ID группы не проходит проверку внешнего ключа. Чтобы перевести студента, через <code>PUT /api/students/{id}</code> меняется <code>group_id</code> вместе с остальными полями.</p>
+<p>Для <code>GET /api/groups/{id}</code> репозиторий использует:</p>
+<pre><code class="language-go">err := r.db.WithContext(ctx).
+    Preload(&quot;Students&quot;).
+    First(&amp;group, id).Error
+</code></pre>
+<pre><code class="language-text">GET /api/groups/1
+HTTP 200 OK
+{
+  &quot;id&quot;: 1,
+  &quot;name&quot;: &quot;К3339&quot;,
+  &quot;course&quot;: 3,
+  &quot;students&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;first_name&quot;: &quot;Ильхам&quot;,
+      &quot;last_name&quot;: &quot;Хашимов&quot;,
+      &quot;birth_date&quot;: &quot;2005-01-01&quot;,
+      &quot;group_id&quot;: 1,
+      &quot;is_active&quot;: true
+    },
+    {
+      &quot;id&quot;: 2,
+      &quot;first_name&quot;: &quot;Анна&quot;,
+      &quot;last_name&quot;: &quot;Иванова&quot;,
+      &quot;birth_date&quot;: null,
+      &quot;group_id&quot;: 1,
+      &quot;is_active&quot;: true
+    }
+  ]
+}
+</code></pre>
+<p>Один HTTP-запрос возвращает группу вместе со студентами. Внутри ORM выполняет отдельные SQL-запросы для загрузки связанных записей.</p>
+<h3 id="_5">Многие ко многим: преподаватель и дисциплины<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<p>В <code>internal/teaching/model.go</code> связующая модель содержит <code>TeacherID</code> и <code>SubjectID</code>. В БД это внешние ключи на <code>teachers.id</code> и <code>subjects.id</code>. Каждая строка <code>teaching_assignments</code> связывает одного преподавателя с одной дисциплиной для конкретной группы и семестра. Несколько строк дают связь m:m.</p>
+<p>Назначения из тестового примера:</p>
+<table>
+<thead>
+<tr>
+<th><code>teacher_id</code></th>
+<th><code>subject_id</code></th>
+<th><code>group_id</code></th>
+<th><code>semester_id</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>Преподаватель 1, Иван Петров, ведёт математику и физику. Математику ведут преподаватели 1 и 2, то есть Иван Петров и Мария Соколова. Это показывает обе стороны m:m. Ограничение <code>UNIQUE (teacher_id, subject_id, group_id, semester_id)</code> запрещает только полное повторение назначения: ту же дисциплину можно вести в другой группе или семестре.</p>
+<p>Связь добавляется через <code>POST /api/teachings</code>, изменяется через <code>PUT /api/teachings/{id}</code> и удаляется через <code>DELETE /api/teachings/{id}</code>. При удалении назначения преподаватель и дисциплина остаются. Если на назначение ссылается расписание, сначала нужно удалить его занятия.</p>
+<p><code>GET /api/teachers/{id}</code> возвращает назначения с вложенной дисциплиной и отдельный список <code>subjects</code>. Используется <code>Preload("Assignments.Subject")</code>; список дисциплин собирается без повторов по <code>subject_id</code>.</p>
+<p>В <code>internal/teacher/model.go</code> и <code>internal/teacher/repository.go</code> загрузка устроена так:</p>
+<pre><code class="language-go">// Поле модели Teacher — обратная связь с назначениями.
+Assignments []teaching.TeachingAssignment `gorm:&quot;foreignKey:TeacherID;references:ID&quot; json:&quot;assignments,omitempty&quot;`
+
+// Запрос репозитория — назначения и дисциплина каждого назначения.
+err := r.db.WithContext(ctx).
+    Preload(&quot;Assignments.Subject&quot;).
+    First(&amp;teacher, id).Error
+</code></pre>
+<p>В Django здесь использовалась бы <code>ManyToManyField</code> с промежуточной моделью <code>through</code>; в Go явно загружаются назначения и связанные дисциплины. Саму связь хранят записи БД, а вложенный JSON показывает результат её чтения.</p>
+<p>Для компактного показа из реального ответа выбраны <code>id</code>, <code>first_name</code>, <code>last_name</code> и <code>subjects</code>:</p>
+<pre><code class="language-powershell">Invoke-RestMethod -Uri &quot;$base/api/teachers/1&quot; -Headers $headers |
+    Select-Object id, first_name, last_name, subjects | ConvertTo-Json -Depth 6
+</code></pre>
+<pre><code class="language-text">GET /api/teachers/1
+HTTP 200 OK
+{
+  &quot;id&quot;: 1,
+  &quot;first_name&quot;: &quot;Иван&quot;,
+  &quot;last_name&quot;: &quot;Петров&quot;,
+  &quot;subjects&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;name&quot;: &quot;Математика&quot;
+    },
+    {
+      &quot;id&quot;: 2,
+      &quot;name&quot;: &quot;Физика&quot;
+    }
+  ]
+}
+</code></pre>
+<p>Математика в назначениях этого преподавателя встречается в нескольких группах и семестрах, а в <code>subjects</code> выводится один раз. Поле <code>subjects</code> имеет тег <code>gorm:"-"</code>: это подготовленная часть ответа, а не колонка БД.</p>
+<p>Также <code>GET /api/schedules/{id}</code> возвращает назначение с дисциплиной и кабинет, а <code>GET /api/grades/{id}</code> — студента, дисциплину и семестр.</p>
+<hr />
+<h2 id="task-3-12">Task 3. Аналитические запросы варианта 12<a class="headerlink" href="#task-3-12" title="Permanent link">&para;</a></h2>
+<p>Для запросов указывается семестр. День недели: 1 — понедельник, 7 — воскресенье. Отсутствующие или некорректные параметры возвращают <code>400</code>; если подходящих данных нет, возвращается пустой массив.</p>
+<h3 id="1">1. Предмет в группе на указанной паре<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
+<pre><code class="language-text">GET /api/analytics/lesson?group_id=1&amp;semester_id=1&amp;weekday=1&amp;lesson_number=1
+HTTP 200 OK
+[
+  {
+    &quot;schedule_id&quot;: 1,
+    &quot;lesson_number&quot;: 1,
+    &quot;subject_id&quot;: 1,
+    &quot;subject_name&quot;: &quot;Математика&quot;,
+    &quot;teacher_id&quot;: 1,
+    &quot;teacher_first_name&quot;: &quot;Иван&quot;,
+    &quot;teacher_last_name&quot;: &quot;Петров&quot;,
+    &quot;classroom_id&quot;: 1,
+    &quot;classroom_number&quot;: &quot;301&quot;,
+    &quot;classroom_building&quot;: &quot;Главный&quot;
+  }
+]
+</code></pre>
+<h3 id="2">2. Преподаватели заданной группы<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
+<pre><code class="language-text">GET /api/analytics/teachers?group_id=1&amp;semester_id=1
+HTTP 200 OK
+[
+  {
+    &quot;id&quot;: 1,
+    &quot;first_name&quot;: &quot;Иван&quot;,
+    &quot;last_name&quot;: &quot;Петров&quot;
+  }
+]
+</code></pre>
+<p>В запросе используется <code>SELECT DISTINCT</code>, поэтому Иван Петров выводится один раз, хотя ведёт у группы две дисциплины.</p>
+<h3 id="3">3. Группы, где преподаватель ведёт заданный предмет<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
+<pre><code class="language-text">GET /api/analytics/groups?teacher_id=1&amp;subject_id=1&amp;semester_id=1
+HTTP 200 OK
+[
+  {
+    &quot;id&quot;: 1,
+    &quot;name&quot;: &quot;К3339&quot;,
+    &quot;course&quot;: 3
+  },
+  {
+    &quot;id&quot;: 3,
+    &quot;name&quot;: &quot;К1339&quot;,
+    &quot;course&quot;: 1
+  }
+]
+</code></pre>
+<h3 id="4">4. Расписание группы на день недели<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<pre><code class="language-text">GET /api/analytics/schedule?group_id=1&amp;semester_id=1&amp;weekday=1
+HTTP 200 OK
+</code></pre>
+<p>Ответ содержит полный список занятий с теми же полями, что и в первом запросе. Для краткости результат показан таблицей:</p>
+<table>
+<thead>
+<tr>
+<th>ID занятия</th>
+<th>Пара</th>
+<th>Дисциплина</th>
+<th>Преподаватель</th>
+<th>Кабинет</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>Математика</td>
+<td>Иван Петров</td>
+<td>301</td>
+</tr>
+<tr>
+<td>7</td>
+<td>2</td>
+<td>Физика</td>
+<td>Иван Петров</td>
+<td>301</td>
+</tr>
+</tbody>
+</table>
+<p>Строки упорядочены по номеру пары. Пропуски в ID возможны: PostgreSQL расходует значения последовательности и при попытках вставки, завершившихся ошибкой.</p>
+<h3 id="5">5. Количество студентов по курсам в указанном кабинете<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
+<p>В условии используется выражение «в указанном классе». В этой реализации оно трактуется как учебный кабинет: считаются активные студенты групп, у которых запланированы занятия в этом кабинете за выбранный семестр. Фактическая посещаемость не хранится.</p>
+<pre><code class="language-text">GET /api/analytics/student-counts?classroom_id=1&amp;semester_id=1
+HTTP 200 OK
+[
+  {
+    &quot;course&quot;: 3,
+    &quot;student_count&quot;: 2
+  }
+]
+</code></pre>
+<p>У К3339 две пары в кабинете 301, но два студента посчитаны один раз благодаря <code>COUNT(DISTINCT st.id)</code>.</p>
+<hr />
+<h2 id="task-4">Task 4. Семестровые оценки и ведомость<a class="headerlink" href="#task-4" title="Permanent link">&para;</a></h2>
+<p>Оценка создаётся отдельным запросом:</p>
+<pre><code class="language-text">POST /api/grades
+{&quot;semester_id&quot;:1,&quot;student_id&quot;:1,&quot;subject_id&quot;:1,&quot;value&quot;:5}
+HTTP 201 Created
+{&quot;id&quot;:1,&quot;student_id&quot;:1,&quot;subject_id&quot;:1,&quot;semester_id&quot;:1,&quot;value&quot;:5}
+</code></pre>
+<p>Ведомость получается через <code>GET /api/reports/statement?group_id=1&amp;semester_id=1</code>. Полный JSON содержит группу, семестр, студентов с оценками, средние баллы по студентам и дисциплинам, количество студентов и оценок, средний балл группы.</p>
+<p>На тестовых данных результат такой:</p>
+<table>
+<thead>
+<tr>
+<th>Студент</th>
+<th>Математика</th>
+<th>Физика</th>
+<th>Средний балл</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Анна Иванова</td>
+<td>3</td>
+<td>нет оценки</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Ильхам Хашимов</td>
+<td>5</td>
+<td>4</td>
+<td>4,5</td>
+</tr>
+</tbody>
+</table>
+<p>Средний по математике — 4, по физике — 4. Средний по группе считается по всем выставленным оценкам: <code>(3 + 5 + 4) / 3 = 4</code>. Это не среднее уже округлённых средних баллов студентов.</p>
+<p>Из ответа можно вывести только итоговые поля:</p>
+<pre><code class="language-powershell">Invoke-RestMethod -Uri &quot;$base/api/reports/statement?group_id=1&amp;semester_id=1&quot; -Headers $headers |
+    Select-Object student_count, grade_count, average | ConvertTo-Json
+</code></pre>
+<pre><code class="language-json">{
+  &quot;student_count&quot;: 2,
+  &quot;grade_count&quot;: 3,
+  &quot;average&quot;: 4
+}
+</code></pre>
+<p>Отсутствующая оценка возвращается как <code>null</code> и не участвует в вычислениях. Если оценок нет совсем, средний балл тоже <code>null</code>. Значения округляются до двух знаков. Для чтения частей ведомости используется одна транзакция <code>Repeatable Read</code>.</p>
+<h3 id="_6">Выгрузка документа<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>Параметр <code>format=csv</code> возвращает файл ведомости:</p>
+<pre><code class="language-powershell">curl.exe &quot;$base/api/reports/statement?group_id=1&amp;semester_id=1&amp;format=csv&quot; `
+    -H &quot;Authorization: Token $($login.auth_token)&quot; -o statement.csv
+</code></pre>
+<p>Полученное содержимое CSV:</p>
+<pre><code class="language-text">Группа;К3339
+Учебный год;2026-2027;Семестр;1
+ID;Фамилия;Имя;Обучается;Математика;Физика;Средний балл
+2;Иванова;Анна;true;3;;3.00
+1;Хашимов;Ильхам;true;5;4;4.50
+;Средний балл по дисциплине;;;4.00;4.00;4.00
+Количество студентов;2
+Количество оценок;3
+</code></pre>
+<p>В ответе устанавливаются <code>Content-Type: text/csv; charset=utf-8</code> и <code>Content-Disposition: attachment; filename=statement_1_1.csv</code>. Разделитель — <code>;</code>, добавлен UTF-8 BOM для русского текста в Excel.</p>
+<h3 id="_7">Изменение оценки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>Меняем оценку по математике с 5 на 2:</p>
+<pre><code class="language-text">PUT /api/grades/1
+{&quot;semester_id&quot;:1,&quot;student_id&quot;:1,&quot;subject_id&quot;:1,&quot;value&quot;:2}
+HTTP 204 No Content
+</code></pre>
+<p>Повторный запрос ведомости возвращает средний балл группы 3: <code>(3 + 2 + 4) / 3 = 3</code>. Данные за другой семестр в расчёт не попадают.</p>
+<hr />
+<h2 id="_8">Проверки данных, отчисление и увольнение<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<p>В сервисах проверяются обязательные поля, положительные ID, курс и номер пары, формат учебного года, диапазоны дня недели и оценки. Дополнительные проверки находятся в <code>migrations/business_rules.sql</code>.</p>
+<p>В одном семестре на одной паре не могут одновременно быть заняты одна группа, один преподаватель или один кабинет. Проверяются создание и изменение расписания, а также изменение назначения, которое уже включено в расписание.</p>
+<p>Попытка поставить физику группе К3339 на занятую первую пару:</p>
+<pre><code class="language-text">POST /api/schedules
+{&quot;assignment_id&quot;:3,&quot;classroom_id&quot;:2,&quot;lesson_number&quot;:1,&quot;weekday&quot;:1}
+HTTP 409 Conflict
+{&quot;error&quot;:&quot;в эту пару заняты группа, преподаватель или кабинет&quot;}
+</code></pre>
+<p>Проверка выполняется триггером PostgreSQL. <code>pg_advisory_xact_lock</code> последовательно пропускает конкурирующие изменения расписания и назначений, чтобы два одновременных запроса не заняли одну пару.</p>
+<p>Оценку можно выставить только активному студенту по дисциплине, назначенной его группе за нужный семестр:</p>
+<pre><code class="language-text">POST /api/grades
+{&quot;semester_id&quot;:1,&quot;student_id&quot;:3,&quot;subject_id&quot;:2,&quot;value&quot;:4}
+HTTP 400 Bad Request
+{&quot;error&quot;:&quot;дисциплина не назначена группе студента в этом семестре&quot;}
+</code></pre>
+<pre><code class="language-text">POST /api/students/2/expel
+HTTP 204 No Content
+</code></pre>
+<pre><code class="language-text">POST /api/teachers/2/dismiss
+HTTP 204 No Content
+</code></pre>
+<p><code>POST /api/students/{id}/expel</code> устанавливает <code>is_active=false</code> и сохраняет студента с оценками. <code>POST /api/teachers/{id}/dismiss</code> сохраняет преподавателя и назначения, меняя его активность. Обе операции возвращают <code>204</code>. После этого новые оценки отчисленному студенту и назначения уволенному преподавателю отклоняются с <code>400</code>.</p>
+<p><code>DELETE</code> действительно удаляет запись: у студента предварительно удаляются оценки, у преподавателя — связанные занятия и назначения. Эти действия выполняются в транзакции. Остальные связанные справочники защищены внешними ключами: например, нельзя удалить группу, пока на неё ссылаются студенты или назначения.</p>
+<p>Например, удаление студента удалило и его оценку:</p>
+<pre><code class="language-text">DELETE /api/students/1
+HTTP 204 No Content
+</code></pre>
+<pre><code class="language-text">GET /api/grades/1
+HTTP 404 Not Found
+{
+  &quot;error&quot;: &quot;запись не найдена&quot;
+}
+</code></pre>
+<p>Ведомость строится по текущему <code>group_id</code> студента и включает сохранённых неактивных студентов этой группы. Отдельная история переводов между группами в модели не хранится.</p></div>
             </div>
         </div>
 
