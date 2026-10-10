@@ -4,8 +4,6 @@
 
 В третьей работе реализован REST API для учебной части колледжа. В нём хранятся группы, студенты, преподаватели, дисциплины, кабинеты, назначения, расписание и семестровые оценки. Работа на Go, с GORM и PostgreSQL.
 
-В отличие от второй лабы, обработчики возвращают JSON. Ответ получает клиент: `curl`, Postman или программа, которая вызывает API. В консоли сервера остаются сообщения о запуске и ошибках.
-
 Ниже приведены ответы, полученные при проверке обработчиков с настоящей PostgreSQL на тестовых данных. Они оформлены как запрос, HTTP-статус и тело ответа, без служебных заголовков. Значение токена заменено на `<token>`. ID относятся к тестовой базе, в другой базе они могут отличаться.
 
 ---
@@ -36,22 +34,6 @@ laboratory_work_3/
 ```
 
 В папке каждой сущности находятся `model.go`, `repository.go`, `service.go` и `handler.go`. Модель описывает данные, репозиторий выполняет запросы к БД, сервис проверяет данные, обработчик принимает HTTP-запрос и формирует ответ.
-
-Перед запуском нужна созданная база PostgreSQL. Локальный `.env` заполняется по `.env.example`:
-
-```dotenv
-DATABASE_DSN=host=localhost port=5432 user=postgres password=change_me dbname=college_lab3 sslmode=disable
-SERVER_ADDR=:8080
-```
-
-Здесь приведён пример настройки, пароль нужно заменить. `.env` и результаты сборки исключены из Git через `.gitignore`.
-
-Запуск из папки третьей лабораторной:
-
-```powershell
-go mod download
-go run ./cmd/server
-```
 
 В `main.go` подключение создаётся через `database.NewPostgres(dsn)`. Затем `database.InitSchema(db)` применяет оба SQL-файла в одной транзакции. Таблицы создаются через `CREATE TABLE IF NOT EXISTS`, поэтому повторный запуск не удаляет записи. Функции и триггеры обновляются через `CREATE OR REPLACE`.
 
@@ -662,50 +644,3 @@ HTTP 404 Not Found
 ```
 
 Ведомость строится по текущему `group_id` студента и включает сохранённых неактивных студентов этой группы. Отдельная история переводов между группами в модели не хранится.
-
----
-
-## Проверка работы и документация
-
-В `cmd/server/api_test.go` проверены CRUD всех девяти предметных сущностей, вложенные ответы, пять аналитических запросов, ведомость и CSV, регистрация, вход, выход, истечение токена, отчисление, увольнение и конфликты расписания. Для двух одновременных запросов на одну пару проверяется, что ответы — `201` и `409`.
-
-`internal/report/service_test.go` отдельно проверяет средние баллы, отсутствующие оценки и пустую ведомость.
-
-Для интеграционной проверки переменная `TEST_DATABASE_DSN` должна содержать строку подключения к доступной PostgreSQL. Например, её можно прочитать из своего `.env`:
-
-```powershell
-$settings = Get-Content .env | Where-Object { $_ -match '^DATABASE_DSN=' } | Select-Object -First 1
-$env:TEST_DATABASE_DSN = ($settings -replace '^DATABASE_DSN=', '').Trim().Trim('"').Trim("'")
-go test ./cmd/server ./internal/report -v -count=1
-go vet ./...
-go build ./...
-```
-
-Тест создаёт отдельную схему `lab3_test_...` и удаляет её после проверки. Существующие таблицы не изменяются. Без `TEST_DATABASE_DSN` интеграционные тесты пропускаются; тесты расчёта ведомости выполняются.
-
-Вывод двух пакетов с тестами:
-
-```text
-=== RUN   TestCollegeAPI
---- PASS: TestCollegeAPI (0.65s)
-=== RUN   TestCRUDResources
---- PASS: TestCRUDResources (0.35s)
-PASS
-ok  laboratory_work_3/cmd/server  1.032s
-=== RUN   TestStatementAveragesAndMissingGrades
---- PASS: TestStatementAveragesAndMissingGrades (0.00s)
-=== RUN   TestStatementWithoutGrades
---- PASS: TestStatementWithoutGrades (0.00s)
-PASS
-ok  laboratory_work_3/internal/report  0.024s
-```
-
-Также прошли `go vet ./...` и `go build ./...`. Они при успешном выполнении не выводят сообщений.
-
-Отчёт находится в `docs/lab3.md` и подключён к общему `mkdocs.yml`. Для сборки документации из папки `Hashimov_Ilham`:
-
-```powershell
-python -m mkdocs build --strict
-```
-
-Серверная часть и отчёт находятся в ветке `lab3`. В этой реализации функциональность выполнена средствами Go: GORM используется вместо Django ORM, обработчики и структуры запросов — вместо DRF, `internal/auth` — вместо Djoser. Это замена стека, а не использование Python-библиотек внутри Go.
