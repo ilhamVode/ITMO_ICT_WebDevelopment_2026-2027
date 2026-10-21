@@ -95,3 +95,32 @@ func (s *Service) CurrentUser(ctx context.Context, key string) (User, error) {
 func (s *Service) Logout(ctx context.Context, key string) error {
 	return s.repo.DeleteToken(ctx, tokenHash(key))
 }
+
+func (s *Service) ChangeCredentials(ctx context.Context, key, currentPassword, username, newPassword string) (User, error) {
+	user, err := s.CurrentUser(ctx, key)
+	if err != nil {
+		return User{}, err
+	}
+	if bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(currentPassword)) != nil {
+		return User{}, ErrUnauthorized
+	}
+	username = strings.TrimSpace(username)
+	if len(username) < 3 || len(username) > 50 || len(newPassword) < 8 || len(newPassword) > 72 {
+		return User{}, ErrInvalidUser
+	}
+	for _, char := range username {
+		if !unicode.IsLetter(char) && !unicode.IsDigit(char) && char != '_' && char != '-' {
+			return User{}, ErrInvalidUser
+		}
+	}
+	hash, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return User{}, err
+	}
+	if err := s.repo.UpdateCredentials(ctx, user.ID, username, string(hash)); err != nil {
+		return User{}, err
+	}
+	user.Username = username
+	user.PasswordHash = ""
+	return user, nil
+}

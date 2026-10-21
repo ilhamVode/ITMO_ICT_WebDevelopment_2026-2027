@@ -21,11 +21,18 @@ type userRequest struct {
 	Password string `json:"password"`
 }
 
+type credentialsRequest struct {
+	CurrentPassword string `json:"current_password"`
+	Username        string `json:"username"`
+	NewPassword     string `json:"new_password"`
+}
+
 func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("POST /api/auth/users", h.Register)
 	mux.HandleFunc("POST /api/auth/token/login", h.Login)
 	mux.Handle("POST /api/auth/token/logout", h.RequireAuth(http.HandlerFunc(h.Logout)))
 	mux.Handle("GET /api/auth/users/me", h.RequireAuth(http.HandlerFunc(h.CurrentUser)))
+	mux.Handle("PATCH /api/auth/users/me", h.RequireAuth(http.HandlerFunc(h.ChangeCredentials)))
 }
 
 func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
@@ -100,4 +107,18 @@ func (h *Handler) Logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
+}
+
+func (h *Handler) ChangeCredentials(w http.ResponseWriter, r *http.Request) {
+	var req credentialsRequest
+	if err := httpapi.ReadJSON(w, r, &req); err != nil {
+		httpapi.WriteError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	user, err := h.service.ChangeCredentials(r.Context(), requestToken(r), req.CurrentPassword, req.Username, req.NewPassword)
+	if err != nil {
+		handleAuthError(w, err)
+		return
+	}
+	httpapi.WriteJSON(w, http.StatusOK, user)
 }

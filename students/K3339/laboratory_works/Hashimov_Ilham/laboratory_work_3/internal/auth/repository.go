@@ -41,3 +41,14 @@ func (r *Repository) GetByToken(ctx context.Context, key string) (User, error) {
 func (r *Repository) DeleteToken(ctx context.Context, key string) error {
 	return r.db.WithContext(ctx).Where("key = ?", key).Delete(&Token{}).Error
 }
+
+func (r *Repository) UpdateCredentials(ctx context.Context, userID int64, username, passwordHash string) error {
+	return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		if err := tx.Model(&User{}).Where("id = ?", userID).Updates(map[string]any{
+			"username": username, "password_hash": passwordHash,
+		}).Error; err != nil {
+			return err
+		}
+		return tx.Where("user_id = ?", userID).Delete(&Token{}).Error
+	})
+}
