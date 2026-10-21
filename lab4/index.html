@@ -90,6 +90,26 @@
             
             <li class="nav-item" data-bs-level="1"><a href="#no4" class="nav-link">Лабораторная работа №4</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#12" class="nav-link">Вариант 12. Учебная часть колледжа</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#task-1" class="nav-link">Task 1. Проект</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#42-vuejs" class="nav-link">Практика 4.2. Vue.js</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#43-cors" class="nav-link">Практика 4.3. CORS и запросы к серверу</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_2" class="nav-link">Результат</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -97,7 +117,122 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="no4">Лабораторная работа №4<a class="headerlink" href="#no4" title="Permanent link">&para;</a></h1></div>
+<h1 id="no4">Лабораторная работа №4<a class="headerlink" href="#no4" title="Permanent link">&para;</a></h1>
+<h2 id="12">Вариант 12. Учебная часть колледжа<a class="headerlink" href="#12" title="Permanent link">&para;</a></h2>
+<p>В четвёртой работе сделана клиентская часть для API из ЛР3. Приложение написано на Vue 3. Для переходов между страницами используется Vue Router, для запросов Axios, для оформления Vuetify.</p>
+<hr />
+<h2 id="task-1">Task 1. Проект<a class="headerlink" href="#task-1" title="Permanent link">&para;</a></h2>
+<p>Клиент находится в <code>laboratory_work_4/frontend</code>. Основные файлы:</p>
+<pre><code class="language-text">frontend/src/
+├── components/
+│   ├── Hello.vue
+│   ├── StudentForm.vue
+│   └── StudentList.vue
+├── views/
+│   ├── AuthView.vue
+│   ├── AccountView.vue
+│   ├── StudentsView.vue
+│   ├── GroupsView.vue
+│   ├── GradesView.vue
+│   └── HealthView.vue
+├── router/index.js
+├── services/api.js
+├── services/auth.js
+├── App.vue
+└── main.js
+</code></pre>
+<p><code>App.vue</code> содержит верхнее меню и место для страниц (<code>RouterView</code>). Компоненты студентов вынесены отдельно от страницы списка.</p>
+<table>
+<thead>
+<tr>
+<th>Адрес</th>
+<th>Страница</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/hi</code></td>
+<td>Первый пример компонента Vue</td>
+</tr>
+<tr>
+<td><code>/register</code>, <code>/login</code></td>
+<td>Регистрация и вход</td>
+</tr>
+<tr>
+<td><code>/students</code></td>
+<td>Студенты</td>
+</tr>
+<tr>
+<td><code>/groups</code></td>
+<td>Группы</td>
+</tr>
+<tr>
+<td><code>/grades</code></td>
+<td>Оценки</td>
+</tr>
+<tr>
+<td><code>/account</code></td>
+<td>Изменение учётных данных</td>
+</tr>
+<tr>
+<td><code>/health</code></td>
+<td>Проверка сервера</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="42-vuejs">Практика 4.2. Vue.js<a class="headerlink" href="#42-vuejs" title="Permanent link">&para;</a></h2>
+<p>Сначала сделал компонент <code>Hello.vue</code>: поле ввода и список имён. Для списка используется <code>v-for</code>, для поля <code>v-model</code>. Затем сделал <code>StudentForm.vue</code> и <code>StudentList.vue</code>. Форма передаёт данные странице через событие <code>save</code>, а страница загружает студентов и группы из API.</p>
+<p>Пример загрузки данных в <code>StudentsView.vue</code>:</p>
+<pre><code class="language-js">const [studentsResponse, groupsResponse] = await Promise.all([
+  api.get('/api/students'),
+  api.get('/api/groups')
+])
+students.value = studentsResponse.data
+groups.value = groupsResponse.data
+</code></pre>
+<p>Для студентов доступны добавление, изменение, удаление и поиск по имени или фамилии. Группы и оценки также можно просматривать и изменять. При выставлении оценки студент, предмет и семестр выбираются из данных сервера.</p>
+<p>Первый компонент со списком имён:</p>
+<p><img alt="Страница с простым списком студентов" src="../images/lab4/01-hello.png" /></p>
+<p>Форма и таблица учебных групп:</p>
+<p><img alt="Страница учебных групп" src="../images/lab4/02-groups.png" /></p>
+<p>На странице студентов группа выбирается из списка, полученного от API:</p>
+<p><img alt="Форма и список студентов" src="../images/lab4/03-students.png" /></p>
+<p>Сервер проверяет связь оценки с назначенной группе дисциплиной. На снимке видны уже сохранённые оценки и сообщение об ошибке при попытке добавить оценку по неподходящей дисциплине:</p>
+<p><img alt="Проверка данных на странице оценок" src="../images/lab4/04-grades-validation.png" /></p>
+<h3 id="_1">Авторизация<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p>При регистрации отправляются имя пользователя и пароль. После входа сервер возвращает <code>auth_token</code>. Axios добавляет его к запросам в заголовке <code>Authorization: Token ...</code>. Страницы с учебными данными открываются после входа.</p>
+<p>На странице профиля можно изменить имя пользователя и пароль. Для этого в Go API добавлен <code>PATCH /api/auth/users/me</code> с проверкой текущего пароля. После изменения токены пользователя удаляются, поэтому нужно войти снова.</p>
+<p>Формы входа и регистрации:</p>
+<p><img alt="Форма входа" src="../images/lab4/05-login.png" /></p>
+<p><img alt="Форма регистрации" src="../images/lab4/06-register.png" /></p>
+<p>Форма изменения учётных данных:</p>
+<p><img alt="Страница учётных данных" src="../images/lab4/07-account.png" /></p>
+<hr />
+<h2 id="43-cors">Практика 4.3. CORS и запросы к серверу<a class="headerlink" href="#43-cors" title="Permanent link">&para;</a></h2>
+<p>Vue работает на <code>http://localhost:5173</code>, а Go API на <code>http://localhost:8080</code>. Чтобы браузер разрешал запросы между ними, в <code>laboratory_work_3/cmd/server/main.go</code> добавлена обработка CORS:</p>
+<pre><code class="language-go">w.Header().Set(&quot;Access-Control-Allow-Origin&quot;, &quot;http://localhost:5173&quot;)
+w.Header().Set(&quot;Access-Control-Allow-Methods&quot;, &quot;GET, POST, PUT, PATCH, DELETE, OPTIONS&quot;)
+w.Header().Set(&quot;Access-Control-Allow-Headers&quot;, &quot;Content-Type, Authorization&quot;)
+
+if r.Method == http.MethodOptions {
+    w.WriteHeader(http.StatusNoContent)
+    return
+}
+</code></pre>
+<p>Проверка на странице <code>/health</code> выполняет <code>GET /health</code>. Сервер отвечает:</p>
+<pre><code class="language-json">{&quot;status&quot;:&quot;ok&quot;}
+</code></pre>
+<p>В ответе на запрос с источника Vue есть заголовок <code>Access-Control-Allow-Origin: http://localhost:5173</code>. После входа также успешно загружаются списки студентов, групп и оценок.</p>
+<p>Страница проверки соединения показывает ответ сервера:</p>
+<p><img alt="Страница проверки Go API" src="../images/lab4/08-health.png" /></p>
+<p>Во вкладке Network запрос <code>/health</code> завершается со статусом <code>200 OK</code>:</p>
+<p><img alt="Запрос health во вкладке Network" src="../images/lab4/09-health-network.png" /></p>
+<p>После входа запрос списка студентов также возвращает <code>200 OK</code>:</p>
+<p><img alt="Запрос списка студентов во вкладке Network" src="../images/lab4/10-students-network.png" /></p>
+<hr />
+<h2 id="_2">Результат<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>Клиент обращается к существующим маршрутам ЛР3. Сборка Vue и проверка ESLint проходят. Отклик <code>/health</code> и загрузка списков из Go API проверены на запущенном сервере.</p></div>
             </div>
         </div>
 
